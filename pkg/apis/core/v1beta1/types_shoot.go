@@ -492,6 +492,9 @@ type KubeAPIServerConfig struct {
 	// Requests contains configuration for request-specific settings for the kube-apiserver.
 	// +optional
 	Requests *KubeAPIServerRequests `json:"requests,omitempty" protobuf:"bytes,10,opt,name=requests"`
+	// ExternalHostname is used when generating externalized URLs (e.g. Swagger API Docs or OpenID Discovery).
+	// +optional
+	ExternalHostname *string `json:"externalHostname,omitempty" protobuf:"bytes,11,opt,name=externalHostname"`
 }
 
 // KubeAPIServerRequests contains configuration for request-specific settings for the kube-apiserver.

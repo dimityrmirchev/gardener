@@ -3034,6 +3034,13 @@ func schema_pkg_apis_core_v1alpha1_KubeAPIServerConfig(ref common.ReferenceCallb
 							Ref:         ref("github.com/gardener/gardener/pkg/apis/core/v1alpha1.KubeAPIServerRequests"),
 						},
 					},
+					"externalHostname": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ExternalHostname is used when generating externalized URLs (e.g. Swagger API Docs or OpenID Discovery).",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 			},
 		},
@@ -9687,6 +9694,13 @@ func schema_pkg_apis_core_v1beta1_KubeAPIServerConfig(ref common.ReferenceCallba
 						SchemaProps: spec.SchemaProps{
 							Description: "Requests contains configuration for request-specific settings for the kube-apiserver.",
 							Ref:         ref("github.com/gardener/gardener/pkg/apis/core/v1beta1.KubeAPIServerRequests"),
+						},
+					},
+					"externalHostname": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ExternalHostname is used when generating externalized URLs (e.g. Swagger API Docs or OpenID Discovery).",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 				},

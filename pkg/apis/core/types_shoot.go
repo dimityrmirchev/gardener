@@ -386,6 +386,8 @@ type KubeAPIServerConfig struct {
 	WatchCacheSizes *WatchCacheSizes
 	// Requests contains configuration for request-specific settings for the kube-apiserver.
 	Requests *KubeAPIServerRequests
+	// ExternalHostname is used when generating externalized URLs (e.g. Swagger API Docs or OpenID Discovery).
+	ExternalHostname *string
 }
 
 // KubeAPIServerRequests contains configuration for request-specific settings for the kube-apiserver.

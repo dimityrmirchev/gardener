@@ -1520,6 +1520,11 @@ func (in *KubeAPIServerConfig) DeepCopyInto(out *KubeAPIServerConfig) {
 		*out = new(KubeAPIServerRequests)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.ExternalHostname != nil {
+		in, out := &in.ExternalHostname, &out.ExternalHostname
+		*out = new(string)
+		**out = **in
+	}
 	return
 }
 

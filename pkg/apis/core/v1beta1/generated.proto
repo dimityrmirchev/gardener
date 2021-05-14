@@ -783,6 +783,10 @@ message KubeAPIServerConfig {
   // Requests contains configuration for request-specific settings for the kube-apiserver.
   // +optional
   optional KubeAPIServerRequests requests = 10;
+
+  // ExternalHostname is used when generating externalized URLs (e.g. Swagger API Docs or OpenID Discovery).
+  // +optional
+  optional string externalHostname = 11;
 }
 
 // KubeAPIServerRequests contains configuration for request-specific settings for the kube-apiserver.

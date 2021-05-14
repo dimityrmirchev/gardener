@@ -2842,6 +2842,7 @@ func autoConvert_v1alpha1_KubeAPIServerConfig_To_core_KubeAPIServerConfig(in *Ku
 	out.ServiceAccountConfig = (*core.ServiceAccountConfig)(unsafe.Pointer(in.ServiceAccountConfig))
 	out.WatchCacheSizes = (*core.WatchCacheSizes)(unsafe.Pointer(in.WatchCacheSizes))
 	out.Requests = (*core.KubeAPIServerRequests)(unsafe.Pointer(in.Requests))
+	out.ExternalHostname = (*string)(unsafe.Pointer(in.ExternalHostname))
 	return nil
 }
 
@@ -2863,6 +2864,7 @@ func autoConvert_core_KubeAPIServerConfig_To_v1alpha1_KubeAPIServerConfig(in *co
 	out.ServiceAccountConfig = (*ServiceAccountConfig)(unsafe.Pointer(in.ServiceAccountConfig))
 	out.WatchCacheSizes = (*WatchCacheSizes)(unsafe.Pointer(in.WatchCacheSizes))
 	out.Requests = (*KubeAPIServerRequests)(unsafe.Pointer(in.Requests))
+	out.ExternalHostname = (*string)(unsafe.Pointer(in.ExternalHostname))
 	return nil
 }
 

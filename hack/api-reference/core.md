@@ -4128,6 +4128,18 @@ KubeAPIServerRequests
 <p>Requests contains configuration for request-specific settings for the kube-apiserver.</p>
 </td>
 </tr>
+<tr>
+<td>
+<code>externalHostname</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>ExternalHostname is used when generating externalized URLs (e.g. Swagger API Docs or OpenID Discovery).</p>
+</td>
+</tr>
 </tbody>
 </table>
 <h3 id="core.gardener.cloud/v1beta1.KubeAPIServerRequests">KubeAPIServerRequests
