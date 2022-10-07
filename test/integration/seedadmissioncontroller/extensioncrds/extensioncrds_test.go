@@ -48,6 +48,7 @@ var _ = Describe("Extension CRDs Webhook Handler", func() {
 
 	BeforeEach(func() {
 		crdObjects = []client.Object{
+			&apiextensionsv1.CustomResourceDefinition{ObjectMeta: metav1.ObjectMeta{Name: "auditbackends.extensions.gardener.cloud"}},
 			&apiextensionsv1.CustomResourceDefinition{ObjectMeta: metav1.ObjectMeta{Name: "backupbuckets.extensions.gardener.cloud"}},
 			&apiextensionsv1.CustomResourceDefinition{ObjectMeta: metav1.ObjectMeta{Name: "backupentries.extensions.gardener.cloud"}},
 			&apiextensionsv1.CustomResourceDefinition{ObjectMeta: metav1.ObjectMeta{Name: "bastions.extensions.gardener.cloud"}},
@@ -63,6 +64,7 @@ var _ = Describe("Extension CRDs Webhook Handler", func() {
 			&apiextensionsv1.CustomResourceDefinition{ObjectMeta: metav1.ObjectMeta{Name: "workers.extensions.gardener.cloud"}},
 		}
 		objects = []client.Object{
+			&extensionsv1alpha1.AuditBackend{ObjectMeta: metav1.ObjectMeta{Namespace: testNamespace.Name, Name: "foo"}},
 			&extensionsv1alpha1.BackupBucket{ObjectMeta: metav1.ObjectMeta{Name: "foo"}},
 			&extensionsv1alpha1.BackupEntry{ObjectMeta: metav1.ObjectMeta{Name: "shoot--foo--bar"}},
 			&extensionsv1alpha1.ContainerRuntime{ObjectMeta: metav1.ObjectMeta{Namespace: testNamespace.Name, Name: "foo"}},

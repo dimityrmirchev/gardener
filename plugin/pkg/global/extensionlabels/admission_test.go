@@ -172,6 +172,7 @@ var _ = Describe("ExtensionLabels tests", func() {
 			extensionType2   = "extension-type-2" // globally enabled + disabled for shoot
 			extensionType3   = "extension-type-3" // enabled for shoot
 			extensionType4   = "extension-type-4" // not enabled
+			auditBackendType = "audit-backend-provider"
 		)
 
 		BeforeEach(func() {
@@ -255,6 +256,15 @@ var _ = Describe("ExtensionLabels tests", func() {
 							},
 						},
 					},
+					Kubernetes: core.Kubernetes{
+						KubeAPIServer: &core.KubeAPIServerConfig{
+							AuditConfig: &core.AuditConfig{
+								Backend: &core.AuditBackend{
+									Type: auditBackendType,
+								},
+							},
+						},
+					},
 					Extensions: []core.Extension{
 						{
 							Type:     extensionType2,
@@ -276,6 +286,7 @@ var _ = Describe("ExtensionLabels tests", func() {
 
 			expectedLabels := make(map[string]string)
 
+			expectedLabels["auditbackend.extensions.gardener.cloud/"+auditBackendType] = "true"
 			expectedLabels["networking.extensions.gardener.cloud/"+networkingType] = "true"
 			expectedLabels["operatingsystemconfig.extensions.gardener.cloud/"+machineImage1] = "true"
 			expectedLabels["provider.extensions.gardener.cloud/"+providerType] = "true"
@@ -322,6 +333,7 @@ var _ = Describe("ExtensionLabels tests", func() {
 			newShoot := shoot.DeepCopy()
 			newShoot.Spec.Provider.Workers = append(newShoot.Spec.Provider.Workers, worker)
 			newShoot.Spec.Extensions = extension
+			newShoot.Spec.Kubernetes = core.Kubernetes{}
 
 			attrs := admission.NewAttributesRecord(newShoot, shoot, core.Kind("Shoot").WithVersion("version"), shoot.Namespace, shoot.Name, core.Resource("Shoot").WithVersion("version"), "", admission.Update, &metav1.UpdateOptions{}, false, nil)
 			err := admissionHandler.Admit(context.TODO(), attrs, nil)

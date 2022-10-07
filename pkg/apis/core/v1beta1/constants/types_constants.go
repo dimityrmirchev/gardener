@@ -381,6 +381,8 @@ const (
 	// SeedResourceManagerClass is the resource-class managed by the Gardener-Resource-Manager
 	// instance in the garden namespace on the seeds.
 	SeedResourceManagerClass = "seed"
+	// LabelAuditBackendProvider is used to identify the audit backend provider.
+	LabelAuditBackendProvider = "auditbackend.gardener.cloud/provider"
 	// LabelBackupProvider is used to identify the backup provider.
 	LabelBackupProvider = "backup.gardener.cloud/provider"
 	// LabelSeedProvider is used to identify the seed provider.
@@ -406,6 +408,8 @@ const (
 
 	// LabelExtensionExtensionTypePrefix is used to prefix extension label for extension types.
 	LabelExtensionExtensionTypePrefix = "extensions.extensions.gardener.cloud/"
+	// LabelExtensionAuditBackendTypePrefix is used to prefix extension label for audit backend types.
+	LabelExtensionAuditBackendTypePrefix = "auditbackend.extensions.gardener.cloud/"
 	// LabelExtensionProviderTypePrefix is used to prefix extension label for cloud provider types.
 	LabelExtensionProviderTypePrefix = "provider.extensions.gardener.cloud/"
 	// LabelExtensionDNSRecordTypePrefix is used to prefix extension label for DNS types.

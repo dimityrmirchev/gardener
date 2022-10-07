@@ -141,6 +141,13 @@ func (b *Botanist) HibernateControlPlane(ctx context.Context) error {
 		return err
 	}
 
+	// TODO wait scaling of apiserver before scaling this down
+	if b.Shoot.IsAuditBackendEnabled() {
+		if err := b.Shoot.Components.Extensions.AuditBackend.Deploy(ctx); err != nil {
+			return err
+		}
+	}
+
 	return client.IgnoreNotFound(b.ScaleETCDToZero(ctx))
 }
 

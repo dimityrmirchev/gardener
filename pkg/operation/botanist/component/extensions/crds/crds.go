@@ -24,6 +24,8 @@ import (
 )
 
 var (
+	//go:embed templates/crd-extensions.gardener.cloud_auditbackends.yaml
+	auditBackendCRD string
 	//go:embed templates/crd-extensions.gardener.cloud_backupbuckets.yaml
 	backupBucketCRD string
 	//go:embed templates/crd-extensions.gardener.cloud_backupentries.yaml
@@ -56,6 +58,7 @@ var (
 
 func init() {
 	resources = append(resources,
+		auditBackendCRD,
 		backupBucketCRD,
 		backupEntryCRD,
 		bastionCRD,

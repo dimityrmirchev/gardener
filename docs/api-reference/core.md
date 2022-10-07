@@ -1847,6 +1847,50 @@ bool
 </tr>
 </tbody>
 </table>
+<h3 id="core.gardener.cloud/v1beta1.AuditBackend">AuditBackend
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#core.gardener.cloud/v1beta1.AuditConfig">AuditConfig</a>)
+</p>
+<p>
+<p>AuditBackend is a configuration for a backend service capable of handling audit events.</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>type</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>Type identifies the type of the auditlog plugin. This field is immutable.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>providerConfig</code></br>
+<em>
+<a href="https://godoc.org/k8s.io/apimachinery/pkg/runtime#RawExtension">
+k8s.io/apimachinery/pkg/runtime.RawExtension
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>ProviderConfig is the configuration passed to auditlog resource.</p>
+</td>
+</tr>
+</tbody>
+</table>
 <h3 id="core.gardener.cloud/v1beta1.AuditConfig">AuditConfig
 </h3>
 <p>
@@ -1876,6 +1920,20 @@ AuditPolicy
 <td>
 <em>(Optional)</em>
 <p>AuditPolicy contains configuration settings for audit policy of the kube-apiserver.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>backend</code></br>
+<em>
+<a href="#core.gardener.cloud/v1beta1.AuditBackend">
+AuditBackend
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Backend contains configuration settings for a backend service capable of handling audit events.</p>
 </td>
 </tr>
 </tbody>

@@ -32,6 +32,8 @@ import (
 )
 
 const (
+	// AuditBackendWebhookPath is the HTTP handler path for this admission webhook handler for AuditBackend.
+	AuditBackendWebhookPath = "/validate-extensions-gardener-cloud-v1alpha1-auditbackend"
 	// BackupBucketWebhookPath is the HTTP handler path for this admission webhook handler for BackupBucket.
 	BackupBucketWebhookPath = "/validate-extensions-gardener-cloud-v1alpha1-backupbucket"
 	// BackupEntryWebhookPath is the HTTP handler path for this admission webhook handler for BackupEntry.
@@ -71,6 +73,7 @@ func AddWebhooks(mgr manager.Manager) error {
 
 var (
 	validators = map[client.Object]admission.CustomValidator{
+		&extensionsv1alpha1.AuditBackend{}:          &auditBackendValidator{},
 		&extensionsv1alpha1.BackupBucket{}:          &backupBucketValidator{},
 		&extensionsv1alpha1.BackupEntry{}:           &backupEntryValidator{},
 		&extensionsv1alpha1.Bastion{}:               &bastionValidator{},
@@ -87,6 +90,7 @@ var (
 )
 
 type (
+	auditBackendValidator          struct{}
 	backupBucketValidator          struct{}
 	backupEntryValidator           struct{}
 	bastionValidator               struct{}
@@ -100,6 +104,26 @@ type (
 	operatingSystemConfigValidator struct{}
 	workerValidator                struct{}
 )
+
+func (auditBackendValidator) ValidateCreate(ctx context.Context, obj runtime.Object) error {
+	object := obj.(*extensionsv1alpha1.AuditBackend)
+	if errs := validation.ValidateAuditBackend(object); len(errs) > 0 {
+		return apierrors.NewInvalid(extensionsv1alpha1.Kind(extensionsv1alpha1.AuditBackendResource), object.GetName(), errs)
+	}
+	return nil
+}
+
+func (auditBackendValidator) ValidateUpdate(ctx context.Context, oldObj, newObj runtime.Object) error {
+	object := newObj.(*extensionsv1alpha1.AuditBackend)
+	if errs := validation.ValidateAuditBackendUpdate(object, oldObj.(*extensionsv1alpha1.AuditBackend)); len(errs) > 0 {
+		return apierrors.NewInvalid(extensionsv1alpha1.Kind(extensionsv1alpha1.AuditBackendResource), object.GetName(), errs)
+	}
+	return nil
+}
+
+func (auditBackendValidator) ValidateDelete(ctx context.Context, obj runtime.Object) error {
+	return nil
+}
 
 func (backupBucketValidator) ValidateCreate(ctx context.Context, obj runtime.Object) error {
 	object := obj.(*extensionsv1alpha1.BackupBucket)

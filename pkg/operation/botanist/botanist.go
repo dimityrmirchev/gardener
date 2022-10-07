@@ -91,6 +91,7 @@ func New(ctx context.Context, o *operation.Operation) (*Botanist, error) {
 	}
 
 	// extension components
+	o.Shoot.Components.Extensions.AuditBackend = b.DefaultAuditBackend()
 	o.Shoot.Components.Extensions.ContainerRuntime = b.DefaultContainerRuntime()
 	o.Shoot.Components.Extensions.ControlPlane = b.DefaultControlPlane(extensionsv1alpha1.Normal)
 	o.Shoot.Components.Extensions.ControlPlaneExposure = b.DefaultControlPlane(extensionsv1alpha1.Exposure)

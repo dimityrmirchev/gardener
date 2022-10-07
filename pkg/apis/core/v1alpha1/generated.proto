@@ -71,11 +71,25 @@ message Alerting {
   repeated string emailReceivers = 1;
 }
 
+// AuditBackend is a configuration for a backend service capable of handling audit events.
+message AuditBackend {
+  // Type identifies the type of the auditlog plugin. This field is immutable.
+  optional string type = 1;
+
+  // ProviderConfig is the configuration passed to auditlog resource.
+  // +optional
+  optional k8s.io.apimachinery.pkg.runtime.RawExtension providerConfig = 2;
+}
+
 // AuditConfig contains settings for audit of the api server
 message AuditConfig {
   // AuditPolicy contains configuration settings for audit policy of the kube-apiserver.
   // +optional
   optional AuditPolicy auditPolicy = 1;
+
+  // Backend contains configuration settings for a backend service capable of handling audit events.
+  // +optional
+  optional AuditBackend backend = 2;
 }
 
 // AuditPolicy contains audit policy for kube-apiserver

@@ -483,3 +483,11 @@ func IsMultiZonalSeed(seed *core.Seed) bool {
 	}
 	return seed.Spec.HighAvailability != nil && seed.Spec.HighAvailability.FailureTolerance.Type == core.FailureToleranceTypeZone
 }
+
+// IsAuditBackendEnabled checks if the shoot has audit backend enabled.
+func IsAuditBackendEnabled(shoot *core.Shoot) bool {
+	return shoot.Spec.Kubernetes.KubeAPIServer != nil &&
+		shoot.Spec.Kubernetes.KubeAPIServer.AuditConfig != nil &&
+		shoot.Spec.Kubernetes.KubeAPIServer.AuditConfig.Backend != nil &&
+		shoot.Spec.Kubernetes.KubeAPIServer.AuditConfig.Backend.Type != ""
+}

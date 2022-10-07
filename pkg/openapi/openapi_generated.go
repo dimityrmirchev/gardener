@@ -40,6 +40,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/gardener/gardener/pkg/apis/core/v1alpha1.Addons":                                 schema_pkg_apis_core_v1alpha1_Addons(ref),
 		"github.com/gardener/gardener/pkg/apis/core/v1alpha1.AdmissionPlugin":                        schema_pkg_apis_core_v1alpha1_AdmissionPlugin(ref),
 		"github.com/gardener/gardener/pkg/apis/core/v1alpha1.Alerting":                               schema_pkg_apis_core_v1alpha1_Alerting(ref),
+		"github.com/gardener/gardener/pkg/apis/core/v1alpha1.AuditBackend":                           schema_pkg_apis_core_v1alpha1_AuditBackend(ref),
 		"github.com/gardener/gardener/pkg/apis/core/v1alpha1.AuditConfig":                            schema_pkg_apis_core_v1alpha1_AuditConfig(ref),
 		"github.com/gardener/gardener/pkg/apis/core/v1alpha1.AuditPolicy":                            schema_pkg_apis_core_v1alpha1_AuditPolicy(ref),
 		"github.com/gardener/gardener/pkg/apis/core/v1alpha1.AvailabilityZone":                       schema_pkg_apis_core_v1alpha1_AvailabilityZone(ref),
@@ -198,6 +199,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/gardener/gardener/pkg/apis/core/v1beta1.Addons":                                  schema_pkg_apis_core_v1beta1_Addons(ref),
 		"github.com/gardener/gardener/pkg/apis/core/v1beta1.AdmissionPlugin":                         schema_pkg_apis_core_v1beta1_AdmissionPlugin(ref),
 		"github.com/gardener/gardener/pkg/apis/core/v1beta1.Alerting":                                schema_pkg_apis_core_v1beta1_Alerting(ref),
+		"github.com/gardener/gardener/pkg/apis/core/v1beta1.AuditBackend":                            schema_pkg_apis_core_v1beta1_AuditBackend(ref),
 		"github.com/gardener/gardener/pkg/apis/core/v1beta1.AuditConfig":                             schema_pkg_apis_core_v1beta1_AuditConfig(ref),
 		"github.com/gardener/gardener/pkg/apis/core/v1beta1.AuditPolicy":                             schema_pkg_apis_core_v1beta1_AuditPolicy(ref),
 		"github.com/gardener/gardener/pkg/apis/core/v1beta1.AvailabilityZone":                        schema_pkg_apis_core_v1beta1_AvailabilityZone(ref),
@@ -914,6 +916,36 @@ func schema_pkg_apis_core_v1alpha1_Alerting(ref common.ReferenceCallback) common
 	}
 }
 
+func schema_pkg_apis_core_v1alpha1_AuditBackend(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "AuditBackend is a configuration for a backend service capable of handling audit events.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"type": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Type identifies the type of the auditlog plugin. This field is immutable.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"providerConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ProviderConfig is the configuration passed to auditlog resource.",
+							Ref:         ref("k8s.io/apimachinery/pkg/runtime.RawExtension"),
+						},
+					},
+				},
+				Required: []string{"type"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/runtime.RawExtension"},
+	}
+}
+
 func schema_pkg_apis_core_v1alpha1_AuditConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -927,11 +959,17 @@ func schema_pkg_apis_core_v1alpha1_AuditConfig(ref common.ReferenceCallback) com
 							Ref:         ref("github.com/gardener/gardener/pkg/apis/core/v1alpha1.AuditPolicy"),
 						},
 					},
+					"backend": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Backend contains configuration settings for a backend service capable of handling audit events.",
+							Ref:         ref("github.com/gardener/gardener/pkg/apis/core/v1alpha1.AuditBackend"),
+						},
+					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/gardener/gardener/pkg/apis/core/v1alpha1.AuditPolicy"},
+			"github.com/gardener/gardener/pkg/apis/core/v1alpha1.AuditBackend", "github.com/gardener/gardener/pkg/apis/core/v1alpha1.AuditPolicy"},
 	}
 }
 
@@ -8300,6 +8338,36 @@ func schema_pkg_apis_core_v1beta1_Alerting(ref common.ReferenceCallback) common.
 	}
 }
 
+func schema_pkg_apis_core_v1beta1_AuditBackend(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "AuditBackend is a configuration for a backend service capable of handling audit events.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"type": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Type identifies the type of the auditlog plugin. This field is immutable.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"providerConfig": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ProviderConfig is the configuration passed to auditlog resource.",
+							Ref:         ref("k8s.io/apimachinery/pkg/runtime.RawExtension"),
+						},
+					},
+				},
+				Required: []string{"type"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/runtime.RawExtension"},
+	}
+}
+
 func schema_pkg_apis_core_v1beta1_AuditConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -8313,11 +8381,17 @@ func schema_pkg_apis_core_v1beta1_AuditConfig(ref common.ReferenceCallback) comm
 							Ref:         ref("github.com/gardener/gardener/pkg/apis/core/v1beta1.AuditPolicy"),
 						},
 					},
+					"backend": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Backend contains configuration settings for a backend service capable of handling audit events.",
+							Ref:         ref("github.com/gardener/gardener/pkg/apis/core/v1beta1.AuditBackend"),
+						},
+					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/gardener/gardener/pkg/apis/core/v1beta1.AuditPolicy"},
+			"github.com/gardener/gardener/pkg/apis/core/v1beta1.AuditBackend", "github.com/gardener/gardener/pkg/apis/core/v1beta1.AuditPolicy"},
 	}
 }
 

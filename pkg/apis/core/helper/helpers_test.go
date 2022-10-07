@@ -807,4 +807,56 @@ var _ = Describe("helper", func() {
 			Expect(IsMultiZonalSeed(seed)).To(BeFalse())
 		})
 	})
+
+	Describe("#IsAuditBackendEnabled", func() {
+		var shoot *core.Shoot
+
+		BeforeEach(func() {
+			shoot = &core.Shoot{}
+		})
+
+		It("shoot has no KubeAPIServer config", func() {
+			Expect(IsAuditBackendEnabled(shoot)).To(BeFalse())
+		})
+
+		It("shoot has no AuditConfig", func() {
+			shoot.Spec.Kubernetes = core.Kubernetes{
+				KubeAPIServer: &core.KubeAPIServerConfig{},
+			}
+			Expect(IsAuditBackendEnabled(shoot)).To(BeFalse())
+		})
+
+		It("shoot has no AuditBackendConfig", func() {
+			shoot.Spec.Kubernetes = core.Kubernetes{
+				KubeAPIServer: &core.KubeAPIServerConfig{
+					AuditConfig: &core.AuditConfig{},
+				},
+			}
+			Expect(IsAuditBackendEnabled(shoot)).To(BeFalse())
+		})
+
+		It("shoot has no AuditBackend type", func() {
+			shoot.Spec.Kubernetes = core.Kubernetes{
+				KubeAPIServer: &core.KubeAPIServerConfig{
+					AuditConfig: &core.AuditConfig{
+						Backend: &core.AuditBackend{},
+					},
+				},
+			}
+			Expect(IsAuditBackendEnabled(shoot)).To(BeFalse())
+		})
+
+		It("shoot has AuditBackend configured", func() {
+			shoot.Spec.Kubernetes = core.Kubernetes{
+				KubeAPIServer: &core.KubeAPIServerConfig{
+					AuditConfig: &core.AuditConfig{
+						Backend: &core.AuditBackend{
+							Type: "foo",
+						},
+					},
+				},
+			}
+			Expect(IsAuditBackendEnabled(shoot)).To(BeTrue())
+		})
+	})
 })

@@ -241,6 +241,11 @@ func addMetaDataLabelsShoot(shoot *core.Shoot, controllerRegistrations []*core.C
 			metav1.SetMetaDataLabel(&shoot.ObjectMeta, v1beta1constants.LabelExtensionDNSRecordTypePrefix+*provider.Type, "true")
 		}
 	}
+
+	if gardencorehelper.IsAuditBackendEnabled(shoot) {
+		metav1.SetMetaDataLabel(&shoot.ObjectMeta, v1beta1constants.LabelExtensionAuditBackendTypePrefix+shoot.Spec.Kubernetes.KubeAPIServer.AuditConfig.Backend.Type, "true")
+	}
+
 	metav1.SetMetaDataLabel(&shoot.ObjectMeta, v1beta1constants.LabelExtensionProviderTypePrefix+shoot.Spec.Provider.Type, "true")
 	metav1.SetMetaDataLabel(&shoot.ObjectMeta, v1beta1constants.LabelExtensionNetworkingTypePrefix+shoot.Spec.Networking.Type, "true")
 }
@@ -285,6 +290,7 @@ func addMetaDataLabelsBackupEntry(backupEntry *core.BackupEntry, backupBucket *c
 
 func removeLabels(objectMeta *metav1.ObjectMeta) {
 	extensionLabels := []string{
+		v1beta1constants.LabelExtensionAuditBackendTypePrefix,
 		v1beta1constants.LabelExtensionExtensionTypePrefix,
 		v1beta1constants.LabelExtensionProviderTypePrefix,
 		v1beta1constants.LabelExtensionDNSRecordTypePrefix,

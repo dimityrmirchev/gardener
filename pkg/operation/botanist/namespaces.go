@@ -63,6 +63,11 @@ func (b *Botanist) DeploySeedNamespace(ctx context.Context) error {
 		metav1.SetMetaDataLabel(&namespace.ObjectMeta, v1beta1constants.LabelShootProvider, b.Shoot.GetInfo().Spec.Provider.Type)
 		metav1.SetMetaDataLabel(&namespace.ObjectMeta, v1beta1constants.LabelNetworkingProvider, b.Shoot.GetInfo().Spec.Networking.Type)
 
+		delete(namespace.Labels, v1beta1constants.LabelAuditBackendProvider)
+		if b.Shoot.IsAuditBackendEnabled() {
+			metav1.SetMetaDataLabel(&namespace.ObjectMeta, v1beta1constants.LabelAuditBackendProvider, b.Shoot.GetInfo().Spec.Kubernetes.KubeAPIServer.AuditConfig.Backend.Type)
+		}
+
 		// Remove all old extension labels before reconciling the new extension labels.
 		for k := range namespace.Labels {
 			if strings.HasPrefix(k, v1beta1constants.LabelExtensionPrefix) {

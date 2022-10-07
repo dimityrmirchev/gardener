@@ -61,7 +61,13 @@ func newControllerArtifacts() controllerArtifacts {
 		stateArtifacts:                  make(map[string]*artifact),
 	}
 
-	gvk := extensionsv1alpha1.SchemeGroupVersion.WithKind(extensionsv1alpha1.BackupBucketResource)
+	gvk := extensionsv1alpha1.SchemeGroupVersion.WithKind(extensionsv1alpha1.AuditBackendResource)
+	a.registerExtensionControllerArtifacts(
+		newControllerInstallationArtifact(gvk, func() client.ObjectList { return &extensionsv1alpha1.AuditBackendList{} }, extensionTypeChanged),
+		newStateArtifact(gvk, func() client.Object { return &extensionsv1alpha1.AuditBackend{} }, extensionStateOrResourcesChanged),
+	)
+
+	gvk = extensionsv1alpha1.SchemeGroupVersion.WithKind(extensionsv1alpha1.BackupBucketResource)
 	a.registerExtensionControllerArtifacts(
 		newControllerInstallationArtifact(gvk, func() client.ObjectList { return &extensionsv1alpha1.BackupBucketList{} }, extensionTypeChanged),
 		disabledArtifact(),

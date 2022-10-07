@@ -748,6 +748,9 @@ type AuditConfig struct {
 	// AuditPolicy contains configuration settings for audit policy of the kube-apiserver.
 	// +optional
 	AuditPolicy *AuditPolicy `json:"auditPolicy,omitempty" protobuf:"bytes,1,opt,name=auditPolicy"`
+	// Backend contains configuration settings for a backend service capable of handling audit events.
+	// +optional
+	Backend *AuditBackend `json:"backend,omitempty" protobuf:"bytes,2,opt,name=backend"`
 }
 
 // AuditPolicy contains audit policy for kube-apiserver
@@ -756,6 +759,15 @@ type AuditPolicy struct {
 	// which contains the audit policy for the kube-apiserver.
 	// +optional
 	ConfigMapRef *corev1.ObjectReference `json:"configMapRef,omitempty" protobuf:"bytes,1,opt,name=configMapRef"`
+}
+
+// AuditBackend is a configuration for a backend service capable of handling audit events.
+type AuditBackend struct {
+	// Type identifies the type of the auditlog plugin. This field is immutable.
+	Type string `json:"type" protobuf:"bytes,1,opt,name=type"`
+	// ProviderConfig is the configuration passed to auditlog resource.
+	// +optional
+	ProviderConfig *runtime.RawExtension `json:"providerConfig,omitempty" protobuf:"bytes,2,opt,name=providerConfig"`
 }
 
 // OIDCConfig contains configuration settings for the OIDC provider.

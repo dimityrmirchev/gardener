@@ -103,6 +103,7 @@ func (r *shootReconciler) runReconcileShootFlow(ctx context.Context, o *operatio
 		requestControlPlanePodsRestart  = controllerutils.HasTask(o.Shoot.GetInfo().Annotations, v1beta1constants.ShootTaskRestartControlPlanePods)
 		kubeProxyEnabled                = gardencorev1beta1helper.KubeProxyEnabled(o.Shoot.GetInfo().Spec.Kubernetes.KubeProxy)
 		shootControlPlaneLoggingEnabled = botanist.Shoot.IsShootControlPlaneLoggingEnabled(botanist.Config)
+		shootAuditBackendEnabled        = botanist.Shoot.IsAuditBackendEnabled()
 		deployKubeAPIServerTaskTimeout  = defaultTimeout
 	)
 
@@ -294,6 +295,21 @@ func (r *shootReconciler) runReconcileShootFlow(ctx context.Context, o *operatio
 			Fn:           botanist.Shoot.Components.Extensions.ControlPlane.Wait,
 			Dependencies: flow.NewTaskIDs(deployControlPlane),
 		})
+		deployAuditBackend = g.Add(flow.Task{
+			Name:         "Deploying shoot audit backend",
+			Fn:           flow.TaskFn(botanist.DeployAuditBackend).DoIf(shootAuditBackendEnabled && !o.Shoot.HibernationEnabled),
+			Dependencies: flow.NewTaskIDs(waitUntilControlPlaneReady),
+		})
+		waitUntilAuditBackendReady = g.Add(flow.Task{
+			Name:         "Waiting until shoot audit backend report readiness",
+			Fn:           flow.TaskFn(botanist.Shoot.Components.Extensions.AuditBackend.Wait).DoIf(shootAuditBackendEnabled && !o.Shoot.HibernationEnabled),
+			Dependencies: flow.NewTaskIDs(deployAuditBackend),
+		})
+		_ = g.Add(flow.Task{
+			Name:         "Deploying shoot audit backend",
+			Fn:           flow.TaskFn(botanist.Shoot.Components.Extensions.AuditBackend.Destroy).DoIf(!shootAuditBackendEnabled),
+			Dependencies: flow.NewTaskIDs(waitUntilControlPlaneReady),
+		})
 		deployKubeAPIServer = g.Add(flow.Task{
 			Name: "Deploying Kubernetes API server",
 			Fn:   flow.TaskFn(botanist.DeployKubeAPIServer).RetryUntilTimeout(defaultInterval, deployKubeAPIServerTaskTimeout),
@@ -303,7 +319,7 @@ func (r *shootReconciler) runReconcileShootFlow(ctx context.Context, o *operatio
 				waitUntilEtcdReady,
 				waitUntilKubeAPIServerServiceIsReady,
 				waitUntilControlPlaneReady,
-			).InsertIf(!staticNodesCIDR, waitUntilInfrastructureReady),
+			).InsertIf(!staticNodesCIDR, waitUntilInfrastructureReady).InsertIf(shootAuditBackendEnabled && !o.Shoot.HibernationEnabled, waitUntilAuditBackendReady),
 		})
 		waitUntilKubeAPIServerIsReady = g.Add(flow.Task{
 			Name:         "Waiting until Kubernetes API server rolled out",

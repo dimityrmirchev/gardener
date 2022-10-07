@@ -10,6 +10,8 @@
 </p>
 Resource Types:
 <ul><li>
+<a href="#extensions.gardener.cloud/v1alpha1.AuditBackend">AuditBackend</a>
+</li><li>
 <a href="#extensions.gardener.cloud/v1alpha1.BackupBucket">BackupBucket</a>
 </li><li>
 <a href="#extensions.gardener.cloud/v1alpha1.BackupEntry">BackupEntry</a>
@@ -34,6 +36,100 @@ Resource Types:
 </li><li>
 <a href="#extensions.gardener.cloud/v1alpha1.Worker">Worker</a>
 </li></ul>
+<h3 id="extensions.gardener.cloud/v1alpha1.AuditBackend">AuditBackend
+</h3>
+<p>
+<p>AuditBackend is the specification for cluster auditlog service.</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>apiVersion</code></br>
+string</td>
+<td>
+<code>
+extensions.gardener.cloud/v1alpha1
+</code>
+</td>
+</tr>
+<tr>
+<td>
+<code>kind</code></br>
+string
+</td>
+<td><code>AuditBackend</code></td>
+</tr>
+<tr>
+<td>
+<code>metadata</code></br>
+<em>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#objectmeta-v1-meta">
+Kubernetes meta/v1.ObjectMeta
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+Refer to the Kubernetes API documentation for the fields of the
+<code>metadata</code> field.
+</td>
+</tr>
+<tr>
+<td>
+<code>spec</code></br>
+<em>
+<a href="#extensions.gardener.cloud/v1alpha1.AuditBackendSpec">
+AuditBackendSpec
+</a>
+</em>
+</td>
+<td>
+<p>Specification of the AuditBackend.
+If the object&rsquo;s deletion timestamp is set, this field is immutable.</p>
+<br/>
+<br/>
+<table>
+<tr>
+<td>
+<code>DefaultSpec</code></br>
+<em>
+<a href="#extensions.gardener.cloud/v1alpha1.DefaultSpec">
+DefaultSpec
+</a>
+</em>
+</td>
+<td>
+<p>
+(Members of <code>DefaultSpec</code> are embedded into this type.)
+</p>
+<p>DefaultSpec is a structure containing common fields used by all extension resources.</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<code>status</code></br>
+<em>
+<a href="#extensions.gardener.cloud/v1alpha1.AuditBackendStatus">
+AuditBackendStatus
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+</td>
+</tr>
+</tbody>
+</table>
 <h3 id="extensions.gardener.cloud/v1alpha1.BackupBucket">BackupBucket
 </h3>
 <p>
@@ -1631,6 +1727,76 @@ WorkerStatus
 </tr>
 </tbody>
 </table>
+<h3 id="extensions.gardener.cloud/v1alpha1.AuditBackendSpec">AuditBackendSpec
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#extensions.gardener.cloud/v1alpha1.AuditBackend">AuditBackend</a>)
+</p>
+<p>
+<p>AuditBackendSpec is the spec for an AuditBackend resource.</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>DefaultSpec</code></br>
+<em>
+<a href="#extensions.gardener.cloud/v1alpha1.DefaultSpec">
+DefaultSpec
+</a>
+</em>
+</td>
+<td>
+<p>
+(Members of <code>DefaultSpec</code> are embedded into this type.)
+</p>
+<p>DefaultSpec is a structure containing common fields used by all extension resources.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="extensions.gardener.cloud/v1alpha1.AuditBackendStatus">AuditBackendStatus
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#extensions.gardener.cloud/v1alpha1.AuditBackend">AuditBackend</a>)
+</p>
+<p>
+<p>AuditBackendStatus is the status for an AuditBackend resource.</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>DefaultStatus</code></br>
+<em>
+<a href="#extensions.gardener.cloud/v1alpha1.DefaultStatus">
+DefaultStatus
+</a>
+</em>
+</td>
+<td>
+<p>
+(Members of <code>DefaultStatus</code> are embedded into this type.)
+</p>
+<p>DefaultStatus is a structure containing common fields used by all extension resources.</p>
+</td>
+</tr>
+</tbody>
+</table>
 <h3 id="extensions.gardener.cloud/v1alpha1.BackupBucketSpec">BackupBucketSpec
 </h3>
 <p>
@@ -2645,6 +2811,7 @@ bool
 </h3>
 <p>
 (<em>Appears on:</em>
+<a href="#extensions.gardener.cloud/v1alpha1.AuditBackendSpec">AuditBackendSpec</a>, 
 <a href="#extensions.gardener.cloud/v1alpha1.BackupBucketSpec">BackupBucketSpec</a>, 
 <a href="#extensions.gardener.cloud/v1alpha1.BackupEntrySpec">BackupEntrySpec</a>, 
 <a href="#extensions.gardener.cloud/v1alpha1.BastionSpec">BastionSpec</a>, 
@@ -2699,6 +2866,7 @@ k8s.io/apimachinery/pkg/runtime.RawExtension
 </h3>
 <p>
 (<em>Appears on:</em>
+<a href="#extensions.gardener.cloud/v1alpha1.AuditBackendStatus">AuditBackendStatus</a>, 
 <a href="#extensions.gardener.cloud/v1alpha1.BackupBucketStatus">BackupBucketStatus</a>, 
 <a href="#extensions.gardener.cloud/v1alpha1.BackupEntryStatus">BackupEntryStatus</a>, 
 <a href="#extensions.gardener.cloud/v1alpha1.BastionStatus">BastionStatus</a>, 

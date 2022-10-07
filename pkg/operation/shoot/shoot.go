@@ -466,6 +466,14 @@ func (s *Shoot) IsShootControlPlaneLoggingEnabled(c *config.GardenletConfigurati
 	return s.Purpose != gardencorev1beta1.ShootPurposeTesting && gardenlethelper.IsLoggingEnabled(c)
 }
 
+// IsAuditBackendEnabled returns true if the AuditBackend extension is enabled for the shoot
+func (s *Shoot) IsAuditBackendEnabled() bool {
+	return !(s.GetInfo().Spec.Kubernetes.KubeAPIServer == nil ||
+		s.GetInfo().Spec.Kubernetes.KubeAPIServer.AuditConfig == nil ||
+		s.GetInfo().Spec.Kubernetes.KubeAPIServer.AuditConfig.Backend == nil ||
+		s.GetInfo().Spec.Kubernetes.KubeAPIServer.AuditConfig.Backend.Type == "")
+}
+
 // TechnicalIDPrefix is a prefix used for a shoot's technical id.
 const TechnicalIDPrefix = "shoot--"
 
@@ -621,6 +629,13 @@ func ComputeRequiredExtensions(shoot *gardencorev1beta1.Shoot, seed *gardencorev
 	requiredExtensions.Insert(gardenerextensions.Id(extensionsv1alpha1.InfrastructureResource, shoot.Spec.Provider.Type))
 	requiredExtensions.Insert(gardenerextensions.Id(extensionsv1alpha1.NetworkResource, shoot.Spec.Networking.Type))
 	requiredExtensions.Insert(gardenerextensions.Id(extensionsv1alpha1.WorkerResource, shoot.Spec.Provider.Type))
+
+	if shoot.Spec.Kubernetes.KubeAPIServer != nil &&
+		shoot.Spec.Kubernetes.KubeAPIServer.AuditConfig != nil &&
+		shoot.Spec.Kubernetes.KubeAPIServer.AuditConfig.Backend != nil &&
+		shoot.Spec.Kubernetes.KubeAPIServer.AuditConfig.Backend.Type != "" {
+		requiredExtensions.Insert(gardenerextensions.Id(extensionsv1alpha1.AuditBackendResource, shoot.Spec.Kubernetes.KubeAPIServer.AuditConfig.Backend.Type))
+	}
 
 	disabledExtensions := sets.NewString()
 	for _, extension := range shoot.Spec.Extensions {

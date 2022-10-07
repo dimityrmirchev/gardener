@@ -366,6 +366,7 @@ var _ = Describe("shoot", func() {
 
 	Describe("#ComputeRequiredExtensions", func() {
 		const (
+			auditBackendProvider = "auditbackendprovider"
 			backupProvider       = "backupprovider"
 			seedProvider         = "seedprovider"
 			shootProvider        = "providertype"
@@ -443,6 +444,15 @@ var _ = Describe("shoot", func() {
 			}
 			shoot = &gardencorev1beta1.Shoot{
 				Spec: gardencorev1beta1.ShootSpec{
+					Kubernetes: gardencorev1beta1.Kubernetes{
+						KubeAPIServer: &gardencorev1beta1.KubeAPIServerConfig{
+							AuditConfig: &gardencorev1beta1.AuditConfig{
+								Backend: &gardencorev1beta1.AuditBackend{
+									Type: auditBackendProvider,
+								},
+							},
+						},
+					},
 					Provider: gardencorev1beta1.Provider{
 						Type: shootProvider,
 						Workers: []gardencorev1beta1.Worker{
@@ -479,6 +489,7 @@ var _ = Describe("shoot", func() {
 			result := ComputeRequiredExtensions(shoot, seed, controllerRegistrationList, internalDomain, externalDomain)
 
 			Expect(result).To(Equal(sets.NewString(
+				extensions.Id(extensionsv1alpha1.AuditBackendResource, auditBackendProvider),
 				extensions.Id(extensionsv1alpha1.BackupBucketResource, backupProvider),
 				extensions.Id(extensionsv1alpha1.BackupEntryResource, backupProvider),
 				extensions.Id(extensionsv1alpha1.ControlPlaneResource, seedProvider),

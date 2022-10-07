@@ -46,6 +46,7 @@ func ValidateControllerRegistration(controllerRegistration *core.ControllerRegis
 
 // SupportedExtensionKinds contains all supported extension kinds.
 var SupportedExtensionKinds = sets.NewString(
+	extensionsv1alpha1.AuditBackendResource,
 	extensionsv1alpha1.BackupBucketResource,
 	extensionsv1alpha1.BackupEntryResource,
 	extensionsv1alpha1.BastionResource,

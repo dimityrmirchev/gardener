@@ -33,6 +33,12 @@ spec:
       maxUnavailable: 0
   kubernetes:
     version: 1.25.0
+    kubeAPIServer:
+      auditConfig:
+        backend:
+          type: sap
+          providerConfig:
+            a: "b"
     kubelet:
       seccompDefault: true
       serializeImagePulls: false

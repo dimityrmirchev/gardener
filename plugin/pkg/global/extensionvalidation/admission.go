@@ -286,6 +286,17 @@ func (e *ExtensionValidator) validateShoot(kindToTypesMap map[string]sets.String
 		}
 	)
 
+	if spec.Kubernetes.KubeAPIServer != nil &&
+		spec.Kubernetes.KubeAPIServer.AuditConfig != nil &&
+		spec.Kubernetes.KubeAPIServer.AuditConfig.Backend != nil &&
+		spec.Kubernetes.KubeAPIServer.AuditConfig.Backend.Type != "" {
+		requiredExtensions = append(requiredExtensions, requiredExtension{
+			extensionsv1alpha1.AuditBackendResource,
+			spec.Kubernetes.KubeAPIServer.AuditConfig.Backend.Type,
+			fmt.Sprintf("%s extension type: %s", message, field.NewPath("spec", "kubernetes", "kubeAPIServer", "auditConfig", "backend", "type")),
+		})
+	}
+
 	if spec.DNS != nil {
 		for i, provider := range spec.DNS.Providers {
 			if provider.Type == nil || *provider.Type == core.DNSUnmanaged {

@@ -132,6 +132,7 @@ type ControlPlane struct {
 
 // Extensions contains references to extension resources.
 type Extensions struct {
+	AuditBackend          component.DeployMigrateWaiter
 	ContainerRuntime      containerruntime.Interface
 	ControlPlane          controlplane.Interface
 	ControlPlaneExposure  controlplane.Interface

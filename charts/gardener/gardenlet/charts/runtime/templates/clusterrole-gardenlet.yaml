@@ -223,6 +223,7 @@ rules:
 - apiGroups:
   - extensions.gardener.cloud
   resources:
+  - auditbackends
   - backupbuckets
   - backupentries
   - bastions
@@ -246,6 +247,7 @@ rules:
 - apiGroups:
   - extensions.gardener.cloud
   resources:
+  - auditbackends/status
   - backupbuckets/status
   - backupentries/status
   - containerruntimes/status

@@ -604,6 +604,8 @@ type ServiceAccountConfig struct {
 type AuditConfig struct {
 	// AuditPolicy contains configuration settings for audit policy of the kube-apiserver.
 	AuditPolicy *AuditPolicy
+	// Backend contains configuration settings for a backend service capable of handling audit events.
+	Backend *AuditBackend
 }
 
 // AuditPolicy contains audit policy for kube-apiserver
@@ -611,6 +613,14 @@ type AuditPolicy struct {
 	// ConfigMapRef is a reference to a ConfigMap object in the same namespace,
 	// which contains the audit policy for the kube-apiserver.
 	ConfigMapRef *corev1.ObjectReference
+}
+
+// AuditBackend is a configuration for a backend service capable of handling audit events.
+type AuditBackend struct {
+	// Type identifies the type of the auditlog plugin. This field is immutable.
+	Type string
+	// ProviderConfig is the configuration passed to the auditlog resource.
+	ProviderConfig *runtime.RawExtension
 }
 
 // OIDCConfig contains configuration settings for the OIDC provider.

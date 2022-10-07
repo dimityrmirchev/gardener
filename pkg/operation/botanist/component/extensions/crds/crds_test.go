@@ -64,7 +64,7 @@ var _ = Describe("#CRDs", func() {
 		func(crdName string) {
 			Expect(c.Get(ctx, client.ObjectKey{Name: crdName}, &apiextensionsv1.CustomResourceDefinition{})).ToNot(HaveOccurred())
 		},
-
+		Entry("AuditBackend", "auditbackends.extensions.gardener.cloud"),
 		Entry("BackupBucket", "backupbuckets.extensions.gardener.cloud"),
 		Entry("BackupEntry", "backupentries.extensions.gardener.cloud"),
 		Entry("Bastion", "bastions.extensions.gardener.cloud"),
@@ -88,6 +88,7 @@ var _ = Describe("#CRDs", func() {
 			Expect(c.Get(ctx, client.ObjectKey{Name: crdName}, &apiextensionsv1.CustomResourceDefinition{})).ToNot(HaveOccurred())
 		},
 
+		Entry("AuditBackend", "auditbackends.extensions.gardener.cloud"),
 		Entry("BackupBucket", "backupbuckets.extensions.gardener.cloud"),
 		Entry("BackupEntry", "backupentries.extensions.gardener.cloud"),
 		Entry("Bastion", "bastions.extensions.gardener.cloud"),
