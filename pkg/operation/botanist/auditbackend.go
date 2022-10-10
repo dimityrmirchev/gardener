@@ -35,12 +35,7 @@ func (b *Botanist) DefaultAuditBackend() component.DeployMigrateWaiter {
 	return auditbackend.New(
 		b.Logger,
 		b.SeedClientSet.Client(),
-		&auditbackend.Values{
-			Namespace:      b.Shoot.SeedNamespace,
-			Name:           b.Shoot.GetInfo().Name,
-			Type:           b.Shoot.GetInfo().Spec.Kubernetes.KubeAPIServer.AuditConfig.Backend.Type,
-			ProviderConfig: b.Shoot.GetInfo().Spec.Kubernetes.KubeAPIServer.AuditConfig.Backend.ProviderConfig,
-		},
+		values,
 		auditbackend.DefaultInterval,
 		auditbackend.DefaultSevereThreshold,
 		auditbackend.DefaultTimeout,

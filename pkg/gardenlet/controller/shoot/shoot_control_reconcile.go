@@ -306,7 +306,7 @@ func (r *shootReconciler) runReconcileShootFlow(ctx context.Context, o *operatio
 			Dependencies: flow.NewTaskIDs(deployAuditBackend),
 		})
 		_ = g.Add(flow.Task{
-			Name:         "Deploying shoot audit backend",
+			Name:         "Destroying shoot audit backend",
 			Fn:           flow.TaskFn(botanist.Shoot.Components.Extensions.AuditBackend.Destroy).DoIf(!shootAuditBackendEnabled),
 			Dependencies: flow.NewTaskIDs(waitUntilControlPlaneReady),
 		})
