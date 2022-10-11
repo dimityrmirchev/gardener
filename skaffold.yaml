@@ -538,6 +538,7 @@ build:
         - cmd/utils
         - extensions/pkg/apis/config
         - extensions/pkg/controller
+        - extensions/pkg/controller/auditbackend
         - extensions/pkg/controller/backupbucket
         - extensions/pkg/controller/backupentry
         - extensions/pkg/controller/backupentry/genericactuator
@@ -623,6 +624,7 @@ build:
         - pkg/provider-local/apis/local/helper
         - pkg/provider-local/apis/local/install
         - pkg/provider-local/apis/local/v1alpha1
+        - pkg/provider-local/controller/auditbackend
         - pkg/provider-local/controller/backupbucket
         - pkg/provider-local/controller/backupentry
         - pkg/provider-local/controller/backupoptions

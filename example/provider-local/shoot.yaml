@@ -36,9 +36,7 @@ spec:
     kubeAPIServer:
       auditConfig:
         backend:
-          type: sap
-          providerConfig:
-            a: "b"
+          type: local
     kubelet:
       seccompDefault: true
       serializeImagePulls: false

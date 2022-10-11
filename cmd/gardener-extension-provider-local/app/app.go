@@ -33,6 +33,7 @@ import (
 	webhookcmd "github.com/gardener/gardener/extensions/pkg/webhook/cmd"
 	gardenerhealthz "github.com/gardener/gardener/pkg/healthz"
 	localinstall "github.com/gardener/gardener/pkg/provider-local/apis/local/install"
+	localauditbackend "github.com/gardener/gardener/pkg/provider-local/controller/auditbackend"
 	localbackupbucket "github.com/gardener/gardener/pkg/provider-local/controller/backupbucket"
 	localbackupentry "github.com/gardener/gardener/pkg/provider-local/controller/backupentry"
 	"github.com/gardener/gardener/pkg/provider-local/controller/backupoptions"
@@ -123,6 +124,11 @@ func NewControllerManagerCommand(ctx context.Context) *cobra.Command {
 			APIServerSNIEnabled:     true,
 		}
 
+		// options for the auditbackend controller
+		auditBackendCtrlOpts = &controllercmd.ControllerOptions{
+			MaxConcurrentReconciles: 5,
+		}
+
 		// options for the local backupbucket controller
 		localBackupBucketOptions = &backupoptions.ControllerOptions{
 			BackupBucketPath:   backupoptions.DefaultBackupPath,
@@ -174,6 +180,7 @@ func NewControllerManagerCommand(ctx context.Context) *cobra.Command {
 			restOpts,
 			mgrOpts,
 			generalOpts,
+			controllercmd.PrefixOption("auditbackend-", auditBackendCtrlOpts),
 			controllercmd.PrefixOption("controlplane-", controlPlaneCtrlOpts),
 			controllercmd.PrefixOption("dnsrecord-", dnsRecordCtrlOpts),
 			controllercmd.PrefixOption("infrastructure-", infraCtrlOpts),
@@ -235,6 +242,7 @@ func NewControllerManagerCommand(ctx context.Context) *cobra.Command {
 			controlPlaneCtrlOpts.Completed().Apply(&localcontrolplane.DefaultAddOptions.Controller)
 			dnsRecordCtrlOpts.Completed().Apply(&localdnsrecord.DefaultAddOptions)
 			healthCheckCtrlOpts.Completed().Apply(&localhealthcheck.DefaultAddOptions.Controller)
+			auditBackendCtrlOpts.Completed().Apply(&localauditbackend.DefaultAddOptions.Controller)
 			infraCtrlOpts.Completed().Apply(&localinfrastructure.DefaultAddOptions.Controller)
 			operatingSystemConfigCtrlOpts.Completed().Apply(&oscommon.DefaultAddOptions.Controller)
 			ingressCtrlOpts.Completed().Apply(&localingress.DefaultAddOptions)
@@ -246,6 +254,7 @@ func NewControllerManagerCommand(ctx context.Context) *cobra.Command {
 
 			reconcileOpts.Completed().Apply(&localcontrolplane.DefaultAddOptions.IgnoreOperationAnnotation)
 			reconcileOpts.Completed().Apply(&localdnsrecord.DefaultAddOptions.IgnoreOperationAnnotation)
+			reconcileOpts.Completed().Apply(&localauditbackend.DefaultAddOptions.IgnoreOperationAnnotation)
 			reconcileOpts.Completed().Apply(&localinfrastructure.DefaultAddOptions.IgnoreOperationAnnotation)
 			reconcileOpts.Completed().Apply(&oscommon.DefaultAddOptions.IgnoreOperationAnnotation)
 			reconcileOpts.Completed().Apply(&localworker.DefaultAddOptions.IgnoreOperationAnnotation)

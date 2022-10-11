@@ -15,6 +15,7 @@
 package app
 
 import (
+	extensionsauditbackendcontroller "github.com/gardener/gardener/extensions/pkg/controller/auditbackend"
 	controllercmd "github.com/gardener/gardener/extensions/pkg/controller/cmd"
 	extensionscontrolplanecontroller "github.com/gardener/gardener/extensions/pkg/controller/controlplane"
 	extensionsdnsrecordcontroller "github.com/gardener/gardener/extensions/pkg/controller/dnsrecord"
@@ -26,6 +27,7 @@ import (
 	webhookcmd "github.com/gardener/gardener/extensions/pkg/webhook/cmd"
 	extensioncontrolplanewebhook "github.com/gardener/gardener/extensions/pkg/webhook/controlplane"
 	extensionshootwebhook "github.com/gardener/gardener/extensions/pkg/webhook/shoot"
+	auditbackendcontroller "github.com/gardener/gardener/pkg/provider-local/controller/auditbackend"
 	backupbucketcontroller "github.com/gardener/gardener/pkg/provider-local/controller/backupbucket"
 	backupentrycontroller "github.com/gardener/gardener/pkg/provider-local/controller/backupentry"
 	controlplanecontroller "github.com/gardener/gardener/pkg/provider-local/controller/controlplane"
@@ -47,6 +49,7 @@ import (
 // ControllerSwitchOptions are the controllercmd.SwitchOptions for the provider controllers.
 func ControllerSwitchOptions() *controllercmd.SwitchOptions {
 	return controllercmd.NewSwitchOptions(
+		controllercmd.Switch(extensionsauditbackendcontroller.ControllerName, auditbackendcontroller.AddToManager),
 		controllercmd.Switch(backupbucketcontroller.ControllerName, backupbucketcontroller.AddToManager),
 		controllercmd.Switch(backupentrycontroller.ControllerName, backupentrycontroller.AddToManager),
 		controllercmd.Switch(extensionscontrolplanecontroller.ControllerName, controlplanecontroller.AddToManager),
