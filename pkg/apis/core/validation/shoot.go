@@ -303,6 +303,17 @@ func ValidateShootSpecUpdate(newSpec, oldSpec *core.ShootSpec, newObjectMeta met
 		allErrs = append(allErrs, validateKubernetesVersionUpdate(newKubernetesVersion, oldKubernetesVersion, idxPath.Child("kubernetes", "version"))...)
 	}
 
+	// allow disabling the audit backend but do not allow directly changing the type of the backend provider
+	// this can change in a future release
+	oldAuditBackendConfigured := isAuditBackendTypeSpecified(oldSpec)
+	newAuditBackendConfigured := isAuditBackendTypeSpecified(newSpec)
+	if oldAuditBackendConfigured && newAuditBackendConfigured {
+		allErrs = append(allErrs, apivalidation.ValidateImmutableField(
+			newSpec.Kubernetes.KubeAPIServer.AuditConfig.Backend.Type,
+			oldSpec.Kubernetes.KubeAPIServer.AuditConfig.Backend.Type,
+			fldPath.Child("kubernetes", "kubeAPIServer", "auditConfig", "backend", "type"))...)
+	}
+
 	allErrs = append(allErrs, apivalidation.ValidateImmutableField(newSpec.Networking.Type, oldSpec.Networking.Type, fldPath.Child("networking", "type"))...)
 	if oldSpec.Networking.Pods != nil {
 		allErrs = append(allErrs, apivalidation.ValidateImmutableField(newSpec.Networking.Pods, oldSpec.Networking.Pods, fldPath.Child("networking", "pods"))...)
@@ -761,10 +772,7 @@ func validateKubernetes(kubernetes core.Kubernetes, dockerConfigured, shootHasDe
 		allErrs = append(allErrs, admissionpluginsvalidation.ValidateAdmissionPlugins(kubeAPIServer.AdmissionPlugins, kubernetes.Version, fldPath.Child("kubeAPIServer", "admissionPlugins"))...)
 
 		if auditConfig := kubeAPIServer.AuditConfig; auditConfig != nil {
-			auditPath := fldPath.Child("kubeAPIServer", "auditConfig")
-			if auditPolicy := auditConfig.AuditPolicy; auditPolicy != nil && auditConfig.AuditPolicy.ConfigMapRef != nil {
-				allErrs = append(allErrs, validateAuditPolicyConfigMapReference(auditPolicy.ConfigMapRef, auditPath.Child("auditPolicy", "configMapRef"))...)
-			}
+			allErrs = append(allErrs, validateAuditConfig(auditConfig, fldPath.Child("kubeAPIServer", "auditConfig"))...)
 		}
 
 		allErrs = append(allErrs, ValidateWatchCacheSizes(kubeAPIServer.WatchCacheSizes, fldPath.Child("kubeAPIServer", "watchCacheSizes"))...)
@@ -2047,4 +2055,34 @@ func isShootReadyForRotationStart(lastOperation *core.LastOperation) bool {
 		return true
 	}
 	return lastOperation.Type == core.LastOperationTypeReconcile
+}
+
+func validateAuditConfig(auditConfig *core.AuditConfig, fldPath *field.Path) field.ErrorList {
+	allErrs := field.ErrorList{}
+
+	if auditPolicy := auditConfig.AuditPolicy; auditPolicy != nil && auditConfig.AuditPolicy.ConfigMapRef != nil {
+		allErrs = append(allErrs, validateAuditPolicyConfigMapReference(auditPolicy.ConfigMapRef, fldPath.Child("auditPolicy", "configMapRef"))...)
+	}
+
+	if auditConfig.Backend != nil && len(auditConfig.Backend.Type) == 0 {
+		allErrs = append(allErrs, field.Required(fldPath.Child("backend", "type"), "audit backend type must be when backend it specified"))
+	}
+
+	return allErrs
+}
+
+func isAuditBackendTypeSpecified(shoot *core.ShootSpec) bool {
+	if shoot.Kubernetes.KubeAPIServer == nil {
+		return false
+	}
+	if shoot.Kubernetes.KubeAPIServer.AuditConfig == nil {
+		return false
+	}
+	if shoot.Kubernetes.KubeAPIServer.AuditConfig.Backend == nil {
+		return false
+	}
+	if shoot.Kubernetes.KubeAPIServer.AuditConfig.Backend.Type == "" {
+		return false
+	}
+	return true
 }

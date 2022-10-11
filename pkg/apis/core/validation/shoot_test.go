@@ -353,6 +353,48 @@ var _ = Describe("Shoot Validation Tests", func() {
 			))
 		})
 
+		Context("#ValidateAuditBackendConfiguration", func() {
+			It("should allow setting an audit config backend type", func() {
+				shoot.Spec.Kubernetes.KubeAPIServer.AuditConfig.Backend = &core.AuditBackend{
+					Type: "foo",
+				}
+				errorList := ValidateShoot(shoot)
+				Expect(errorList).To(HaveLen(0))
+			})
+
+			It("should not allow setting an empty audit config backend type", func() {
+				shoot.Spec.Kubernetes.KubeAPIServer.AuditConfig.Backend = &core.AuditBackend{}
+				errorList := ValidateShoot(shoot)
+				Expect(errorList).To(ConsistOf(
+					PointTo(MatchFields(IgnoreExtras, Fields{
+						"Type":  Equal(field.ErrorTypeRequired),
+						"Field": Equal("spec.kubernetes.kubeAPIServer.auditConfig.backend.type"),
+					})),
+				))
+			})
+
+			It("should allow disabling the audit config backend", func() {
+				shoot.Spec.Kubernetes.KubeAPIServer.AuditConfig.Backend = &core.AuditBackend{Type: "foo"}
+				newShoot := prepareShootForUpdate(shoot)
+				newShoot.Spec.Kubernetes.KubeAPIServer.AuditConfig.Backend = nil
+				errorList := ValidateShootUpdate(newShoot, shoot)
+				Expect(errorList).To(HaveLen(0))
+			})
+
+			It("should not allow directly changing the audit config backend type", func() {
+				shoot.Spec.Kubernetes.KubeAPIServer.AuditConfig.Backend = &core.AuditBackend{Type: "foo"}
+				newShoot := prepareShootForUpdate(shoot)
+				newShoot.Spec.Kubernetes.KubeAPIServer.AuditConfig.Backend.Type = "bar"
+				errorList := ValidateShootUpdate(newShoot, shoot)
+				Expect(errorList).To(HaveLen(1))
+				Expect(errorList).To(ConsistOfFields(Fields{
+					"Type":   Equal(field.ErrorTypeInvalid),
+					"Field":  Equal("spec.kubernetes.kubeAPIServer.auditConfig.backend.type"),
+					"Detail": ContainSubstring(`field is immutable`),
+				}))
+			})
+		})
+
 		Context("#ValidateShootHAControlPlaneUpdate", func() {
 			It("should pass as HAControlPlane annotation has not changed", func() {
 				shoot.Annotations = map[string]string{
