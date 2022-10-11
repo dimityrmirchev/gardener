@@ -51,12 +51,3 @@ func (b *Botanist) DeployAuditBackend(ctx context.Context) error {
 
 	return b.Shoot.Components.Extensions.AuditBackend.Deploy(ctx)
 }
-
-// DestroyAuditBackend destroys the AuditBackend custom resource.
-func (b *Botanist) DestroyAuditBackend(ctx context.Context) error {
-	if b.isRestorePhase() {
-		return b.Shoot.Components.Extensions.AuditBackend.Restore(ctx, b.GetShootState())
-	}
-
-	return b.Shoot.Components.Extensions.AuditBackend.Deploy(ctx)
-}
