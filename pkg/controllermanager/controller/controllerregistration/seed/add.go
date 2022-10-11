@@ -233,7 +233,8 @@ func (r *Reconciler) ShootPredicate() predicate.Predicate {
 				!apiequality.Semantic.DeepEqual(oldShoot.Spec.Extensions, shoot.Spec.Extensions) ||
 				!apiequality.Semantic.DeepEqual(oldShoot.Spec.DNS, shoot.Spec.DNS) ||
 				oldShoot.Spec.Networking.Type != shoot.Spec.Networking.Type ||
-				oldShoot.Spec.Provider.Type != shoot.Spec.Provider.Type
+				oldShoot.Spec.Provider.Type != shoot.Spec.Provider.Type ||
+				wasAuditBackendTypeChanged(oldShoot, shoot)
 		},
 
 		DeleteFunc: func(e event.DeleteEvent) bool {
@@ -360,4 +361,35 @@ func (r *Reconciler) MapControllerDeploymentToAllSeeds(ctx context.Context, log 
 	}
 
 	return nil
+}
+
+func wasAuditBackendTypeChanged(old, new *gardencorev1beta1.Shoot) bool {
+	oldType, oldConfigured := lookupAuditBackendType(old)
+	newType, newConfigured := lookupAuditBackendType(new)
+
+	if oldConfigured != newConfigured {
+		return true
+	}
+
+	if oldConfigured && newConfigured && oldType != newType {
+		return true
+	}
+
+	return false
+}
+
+func lookupAuditBackendType(shoot *gardencorev1beta1.Shoot) (string, bool) {
+	if shoot.Spec.Kubernetes.KubeAPIServer == nil {
+		return "", false
+	}
+	if shoot.Spec.Kubernetes.KubeAPIServer.AuditConfig == nil {
+		return "", false
+	}
+	if shoot.Spec.Kubernetes.KubeAPIServer.AuditConfig.Backend == nil {
+		return "", false
+	}
+	if shoot.Spec.Kubernetes.KubeAPIServer.AuditConfig.Backend.Type == "" {
+		return "", false
+	}
+	return shoot.Spec.Kubernetes.KubeAPIServer.AuditConfig.Backend.Type, true
 }
