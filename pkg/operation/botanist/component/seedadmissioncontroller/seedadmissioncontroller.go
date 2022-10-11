@@ -149,6 +149,7 @@ func (g *gardenerSeedAdmissionController) Deploy(ctx context.Context) error {
 				{
 					APIGroups: []string{extensionsv1alpha1.SchemeGroupVersion.Group},
 					Resources: []string{
+						"auditbackends",
 						"backupbuckets",
 						"backupentries",
 						"bastions",
@@ -455,6 +456,7 @@ func GetValidatingWebhookConfig(caBundle []byte, webhookClientService *corev1.Se
 						APIGroups:   []string{extensionsv1alpha1.SchemeGroupVersion.Group},
 						APIVersions: []string{extensionsv1alpha1.SchemeGroupVersion.Version},
 						Resources: []string{
+							"auditbackends",
 							"backupbuckets",
 							"backupentries",
 							"bastions",
@@ -527,6 +529,7 @@ func getWebhooks(caBundle []byte, webhookClientService *corev1.Service) []admiss
 	)
 
 	resources := map[string]string{
+		"auditbackends":          extensionresources.AuditBackendWebhookPath,
 		"backupbuckets":          extensionresources.BackupBucketWebhookPath,
 		"backupentries":          extensionresources.BackupEntryWebhookPath,
 		"bastions":               extensionresources.BastionWebhookPath,
@@ -540,7 +543,7 @@ func getWebhooks(caBundle []byte, webhookClientService *corev1.Service) []admiss
 		"workers":                extensionresources.WorkerWebhookPath,
 	}
 
-	resourcesName := []string{"backupbuckets", "backupentries", "bastions", "containerruntimes", "controlplanes", "dnsrecords", "extensions", "infrastructures", "networks", "operatingsystemconfigs", "workers"}
+	resourcesName := []string{"auditbackends", "backupbuckets", "backupentries", "bastions", "containerruntimes", "controlplanes", "dnsrecords", "extensions", "infrastructures", "networks", "operatingsystemconfigs", "workers"}
 
 	for _, resource := range resourcesName {
 		webhook := admissionregistrationv1.ValidatingWebhook{

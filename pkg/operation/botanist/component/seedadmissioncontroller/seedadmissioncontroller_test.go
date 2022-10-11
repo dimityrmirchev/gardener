@@ -87,6 +87,7 @@ rules:
 - apiGroups:
   - extensions.gardener.cloud
   resources:
+  - auditbackends
   - backupbuckets
   - backupentries
   - bastions
@@ -336,6 +337,7 @@ webhooks:
     operations:
     - DELETE
     resources:
+    - auditbackends
     - backupbuckets
     - backupentries
     - bastions
@@ -699,6 +701,7 @@ status: {}
 func getWebhooks() string {
 	var webhooks string
 	resources := map[string]string{
+		"auditbackends":          extensionresources.AuditBackendWebhookPath,
 		"backupbuckets":          extensionresources.BackupBucketWebhookPath,
 		"backupentries":          extensionresources.BackupEntryWebhookPath,
 		"bastions":               extensionresources.BastionWebhookPath,
@@ -712,7 +715,7 @@ func getWebhooks() string {
 		"workers":                extensionresources.WorkerWebhookPath,
 	}
 
-	resourcesName := []string{"backupbuckets", "backupentries", "bastions", "containerruntimes", "controlplanes", "dnsrecords", "extensions", "infrastructures", "networks", "operatingsystemconfigs", "workers"}
+	resourcesName := []string{"auditbackends", "backupbuckets", "backupentries", "bastions", "containerruntimes", "controlplanes", "dnsrecords", "extensions", "infrastructures", "networks", "operatingsystemconfigs", "workers"}
 
 	for _, resource := range resourcesName {
 		webhook := `- admissionReviewVersions:
