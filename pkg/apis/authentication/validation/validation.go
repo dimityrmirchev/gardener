@@ -41,15 +41,3 @@ func ValidateAdminKubeconfigRequest(acr *authentication.AdminKubeconfigRequest) 
 	}
 	return allErrs
 }
-
-// ValidateWorkloadIdentity validates a WorkloadIdentity.
-func ValidateWorkloadIdentity(wi *authentication.WorkloadIdentity) field.ErrorList {
-	allErrs := field.ErrorList{}
-	specPath := field.NewPath("spec")
-
-	if len(wi.Spec.Audiences) == 0 {
-		allErrs = append(allErrs, field.Invalid(specPath.Child("audiences"), wi.Spec.Audiences, "should specify at least one audience"))
-	}
-
-	return allErrs
-}
