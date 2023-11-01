@@ -19,7 +19,6 @@ import (
 )
 
 // +genclient
-// +genclient:Namespaced
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // WorkloadIdentity holds certain properties related to Gardener managed workload communicating with external systems.

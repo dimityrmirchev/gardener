@@ -220,7 +220,7 @@ authentication_groups() {
   echo "Generating API groups for pkg/apis/authentication"
 
   bash "${PROJECT_ROOT}"/hack/generate-groups.sh \
-    deepcopy,defaulter \
+    "all" \
     github.com/gardener/gardener/pkg/client/authentication \
     github.com/gardener/gardener/pkg/apis \
     "authentication:v1alpha1" \

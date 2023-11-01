@@ -11,6 +11,8 @@
 Resource Types:
 <ul><li>
 <a href="#authentication.gardener.cloud/v1alpha1.AdminKubeconfigRequest">AdminKubeconfigRequest</a>
+</li><li>
+<a href="#authentication.gardener.cloud/v1alpha1.WorkloadIdentity">WorkloadIdentity</a>
 </li></ul>
 <h3 id="authentication.gardener.cloud/v1alpha1.AdminKubeconfigRequest">AdminKubeconfigRequest
 </h3>
@@ -105,6 +107,97 @@ AdminKubeconfigRequestStatus
 </tr>
 </tbody>
 </table>
+<h3 id="authentication.gardener.cloud/v1alpha1.WorkloadIdentity">WorkloadIdentity
+</h3>
+<p>
+<p>WorkloadIdentity holds certain properties related to Gardener managed workload communicating with external systems.</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>apiVersion</code></br>
+string</td>
+<td>
+<code>
+authentication.gardener.cloud/v1alpha1
+</code>
+</td>
+</tr>
+<tr>
+<td>
+<code>kind</code></br>
+string
+</td>
+<td><code>WorkloadIdentity</code></td>
+</tr>
+<tr>
+<td>
+<code>metadata</code></br>
+<em>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#objectmeta-v1-meta">
+Kubernetes meta/v1.ObjectMeta
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Standard object metadata.</p>
+Refer to the Kubernetes API documentation for the fields of the
+<code>metadata</code> field.
+</td>
+</tr>
+<tr>
+<td>
+<code>spec</code></br>
+<em>
+<a href="#authentication.gardener.cloud/v1alpha1.WorkloadIdentitySpec">
+WorkloadIdentitySpec
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Spec defines the workload identity properties.</p>
+<br/>
+<br/>
+<table>
+<tr>
+<td>
+<code>audiences</code></br>
+<em>
+[]string
+</em>
+</td>
+<td>
+<p>Audiences represent the target systems which the current workload identity will be used against.</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<code>status</code></br>
+<em>
+<a href="#authentication.gardener.cloud/v1alpha1.WorkloadIdentityStatus">
+WorkloadIdentityStatus
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Most recently observed status of the WorkloadIdentity.</p>
+</td>
+</tr>
+</tbody>
+</table>
 <h3 id="authentication.gardener.cloud/v1alpha1.AdminKubeconfigRequestSpec">AdminKubeconfigRequestSpec
 </h3>
 <p>
@@ -179,6 +272,67 @@ Kubernetes meta/v1.Time
 </td>
 <td>
 <p>ExpirationTimestamp is the expiration timestamp of the returned credential.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="authentication.gardener.cloud/v1alpha1.WorkloadIdentitySpec">WorkloadIdentitySpec
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#authentication.gardener.cloud/v1alpha1.WorkloadIdentity">WorkloadIdentity</a>)
+</p>
+<p>
+<p>WorkloadIdentitySpec is the specification of a WorkloadIdentity.</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>audiences</code></br>
+<em>
+[]string
+</em>
+</td>
+<td>
+<p>Audiences represent the target systems which the current workload identity will be used against.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="authentication.gardener.cloud/v1alpha1.WorkloadIdentityStatus">WorkloadIdentityStatus
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#authentication.gardener.cloud/v1alpha1.WorkloadIdentity">WorkloadIdentity</a>)
+</p>
+<p>
+<p>WorkloadIdentityStatus holds the most recently observed status of the workload identity.</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>observedGeneration</code></br>
+<em>
+int64
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>ObservedGeneration is the most recent generation observed for this workload identity.</p>
 </td>
 </tr>
 </tbody>
