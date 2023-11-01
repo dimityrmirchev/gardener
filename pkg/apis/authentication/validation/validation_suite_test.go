@@ -87,3 +87,28 @@ var _ = Describe("ValidateAdminKubeconfigRequest", func() {
 		Expect(errors).To(BeEmpty())
 	})
 })
+
+var _ = Describe("ValidateWorkloadIdentity", func() {
+	var wi *authentication.WorkloadIdentity
+
+	BeforeEach(func() {
+		wi = &authentication.WorkloadIdentity{}
+	})
+
+	It("should fail when audiences are not set", func() {
+		errors := validation.ValidateWorkloadIdentity(wi)
+
+		Expect(errors).To(HaveLen(1))
+		Expect(errors).To(ConsistOfFields(Fields{
+			"Type":  Equal(field.ErrorTypeInvalid),
+			"Field": Equal("spec.audiences"),
+		}))
+	})
+
+	It("should succeed when audiences are set", func() {
+		wi.Spec.Audiences = []string{"one", "two"}
+
+		errors := validation.ValidateWorkloadIdentity(wi)
+		Expect(errors).To(BeEmpty())
+	})
+})

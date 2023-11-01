@@ -60,3 +60,41 @@ message AdminKubeconfigRequestStatus {
   optional k8s.io.apimachinery.pkg.apis.meta.v1.Time expirationTimestamp = 2;
 }
 
+// WorkloadIdentity holds certain properties related to Gardener managed workload communicating with external systems.
+message WorkloadIdentity {
+  // Standard object metadata.
+  // +optional
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
+
+  // Spec defines the workload identity properties.
+  // +optional
+  optional WorkloadIdentitySpec spec = 2;
+
+  // Most recently observed status of the WorkloadIdentity.
+  // +optional
+  optional WorkloadIdentityStatus status = 3;
+}
+
+// WorkloadIdentityList is a collection of WorkloadIdentities.
+message WorkloadIdentityList {
+  // Standard list object metadata.
+  // +optional
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+
+  // Items is the list of WorkloadIdentities.
+  repeated WorkloadIdentity items = 2;
+}
+
+// WorkloadIdentitySpec is the specification of a WorkloadIdentity.
+message WorkloadIdentitySpec {
+  // Audiences represent the target systems which the current workload identity will be used against.
+  repeated string audiences = 4;
+}
+
+// WorkloadIdentityStatus holds the most recently observed status of the workload identity.
+message WorkloadIdentityStatus {
+  // ObservedGeneration is the most recent generation observed for this workload identity.
+  // +optional
+  optional int64 observedGeneration = 1;
+}
+
