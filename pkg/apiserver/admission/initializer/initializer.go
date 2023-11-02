@@ -22,6 +22,8 @@ import (
 	kubeinformers "k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes"
 
+	authenticationclientset "github.com/gardener/gardener/pkg/client/authentication/clientset/versioned"
+	authenticationinformers "github.com/gardener/gardener/pkg/client/authentication/informers/externalversions"
 	gardencoreclientset "github.com/gardener/gardener/pkg/client/core/clientset/internalversion"
 	gardencoreversionedclientset "github.com/gardener/gardener/pkg/client/core/clientset/versioned"
 	gardencoreexternalinformers "github.com/gardener/gardener/pkg/client/core/informers/externalversions"
@@ -40,6 +42,8 @@ func New(
 	seedManagementInformers seedmanagementinformers.SharedInformerFactory,
 	seedManagementClient seedmanagementclientset.Interface,
 	settingsInformers settingsinformers.SharedInformerFactory,
+	authenticationClient authenticationclientset.Interface,
+	authenticationInformers authenticationinformers.SharedInformerFactory,
 	kubeInformers kubeinformers.SharedInformerFactory,
 	kubeClient kubernetes.Interface,
 	dynamicClient dynamic.Interface,
@@ -57,6 +61,9 @@ func New(
 		seedManagementClient:    seedManagementClient,
 
 		settingsInformers: settingsInformers,
+
+		authenticationInformers: authenticationInformers,
+		authenticationClient:    authenticationClient,
 
 		kubeInformers: kubeInformers,
 		kubeClient:    kubeClient,
@@ -95,6 +102,13 @@ func (i pluginInitializer) Initialize(plugin admission.Interface) {
 
 	if wants, ok := plugin.(WantsSettingsInformerFactory); ok {
 		wants.SetSettingsInformerFactory(i.settingsInformers)
+	}
+
+	if wants, ok := plugin.(WantsAuthenticationInformerFactory); ok {
+		wants.SetAuthenticationInformerFactory(i.authenticationInformers)
+	}
+	if wants, ok := plugin.(WantsAuthenticationClientset); ok {
+		wants.SetAuthenticationClientset(i.authenticationClient)
 	}
 
 	if wants, ok := plugin.(WantsKubeInformerFactory); ok {

@@ -16,14 +16,10 @@ package workloadidentity
 
 import (
 	"context"
-	"fmt"
 
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
-	"k8s.io/apimachinery/pkg/fields"
-	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	"k8s.io/apiserver/pkg/registry/generic"
 	"k8s.io/apiserver/pkg/registry/rest"
 	"k8s.io/apiserver/pkg/storage/names"
 
@@ -133,23 +129,4 @@ func (workloadIdentityStatusStrategy) WarningsOnCreate(_ context.Context, _ runt
 
 func (workloadIdentityStatusStrategy) WarningsOnUpdate(_ context.Context, _, _ runtime.Object) []string {
 	return nil
-}
-
-// ToSelectableFields returns a field set that represents the object
-func ToSelectableFields(workloadIdentity *authentication.WorkloadIdentity) fields.Set {
-	// The purpose of allocation with a given number of elements is to reduce
-	// amount of allocations needed to create the fields.Set. If you add any
-	// field here or the number of object-meta related fields changes, this should
-	// be adjusted.
-	workloadIdentitySpecificFieldsSet := make(fields.Set, 2)
-	return generic.AddObjectMetaFieldsSet(workloadIdentitySpecificFieldsSet, &workloadIdentity.ObjectMeta, true)
-}
-
-// GetAttrs returns labels and fields of a given object for filtering purposes.
-func GetAttrs(obj runtime.Object) (labels.Set, fields.Set, error) {
-	workloadIdentity, ok := obj.(*authentication.WorkloadIdentity)
-	if !ok {
-		return nil, nil, fmt.Errorf("not a workload identity")
-	}
-	return labels.Set(workloadIdentity.ObjectMeta.Labels), ToSelectableFields(workloadIdentity), nil
 }

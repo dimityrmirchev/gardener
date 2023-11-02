@@ -49,6 +49,7 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 
 	"github.com/gardener/gardener/pkg/api"
+	authenticationv1alpha1 "github.com/gardener/gardener/pkg/apis/authentication/v1alpha1"
 	gardencorev1beta1 "github.com/gardener/gardener/pkg/apis/core/v1beta1"
 	v1beta1constants "github.com/gardener/gardener/pkg/apis/core/v1beta1/constants"
 	"github.com/gardener/gardener/pkg/apis/operations"
@@ -58,6 +59,8 @@ import (
 	"github.com/gardener/gardener/pkg/apiserver"
 	admissioninitializer "github.com/gardener/gardener/pkg/apiserver/admission/initializer"
 	"github.com/gardener/gardener/pkg/apiserver/storage"
+	authenticationclientset "github.com/gardener/gardener/pkg/client/authentication/clientset/versioned"
+	authenticationinformers "github.com/gardener/gardener/pkg/client/authentication/informers/externalversions"
 	gardencoreclientset "github.com/gardener/gardener/pkg/client/core/clientset/internalversion"
 	gardencoreversionedclientset "github.com/gardener/gardener/pkg/client/core/clientset/versioned"
 	gardencoreexternalinformers "github.com/gardener/gardener/pkg/client/core/informers/externalversions"
@@ -119,6 +122,7 @@ type Options struct {
 	KubeInformerFactory           kubeinformers.SharedInformerFactory
 	SeedManagementInformerFactory seedmanagementinformers.SharedInformerFactory
 	SettingsInformerFactory       settingsinformers.SharedInformerFactory
+	AuthenticationInformerFactory authenticationinformers.SharedInformerFactory
 
 	Logs *logsv1.LoggingConfiguration
 }
@@ -132,6 +136,7 @@ func NewOptions() *Options {
 				seedmanagementv1alpha1.SchemeGroupVersion,
 				settingsv1alpha1.SchemeGroupVersion,
 				operationsv1alpha1.SchemeGroupVersion,
+				authenticationv1alpha1.SchemeGroupVersion,
 			),
 		),
 		ServerRunOptions: genericoptions.NewServerRunOptions(),
@@ -228,6 +233,12 @@ func (o *Options) config(kubeAPIServerConfig *rest.Config, kubeClient *kubernete
 	}
 	o.SettingsInformerFactory = settingsinformers.NewSharedInformerFactory(settingsClient, protobufLoopbackConfig.Timeout)
 
+	authenticationClient, err := authenticationclientset.NewForConfig(&protobufLoopbackConfig)
+	if err != nil {
+		return nil, err
+	}
+	o.AuthenticationInformerFactory = authenticationinformers.NewSharedInformerFactory(authenticationClient, protobufLoopbackConfig.Timeout)
+
 	// dynamic client
 	dynamicClient, err := dynamic.NewForConfig(kubeAPIServerConfig)
 	if err != nil {
@@ -245,6 +256,8 @@ func (o *Options) config(kubeAPIServerConfig *rest.Config, kubeClient *kubernete
 				o.SeedManagementInformerFactory,
 				seedManagementClient,
 				o.SettingsInformerFactory,
+				authenticationClient,
+				o.AuthenticationInformerFactory,
 				o.KubeInformerFactory,
 				kubeClient,
 				dynamicClient,
@@ -321,6 +334,7 @@ func (o *Options) Run(ctx context.Context) error {
 		o.KubeInformerFactory.Start(context.StopCh)
 		o.SeedManagementInformerFactory.Start(context.StopCh)
 		o.SettingsInformerFactory.Start(context.StopCh)
+		o.AuthenticationInformerFactory.Start(context.StopCh)
 		return nil
 	}); err != nil {
 		return err

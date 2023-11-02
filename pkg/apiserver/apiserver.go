@@ -25,6 +25,7 @@ import (
 
 	gardencoreinformers "github.com/gardener/gardener/pkg/client/core/informers/internalversion"
 	"github.com/gardener/gardener/pkg/logger"
+	authenticationrest "github.com/gardener/gardener/pkg/registry/authentication/rest"
 	corerest "github.com/gardener/gardener/pkg/registry/core/rest"
 	operationsrest "github.com/gardener/gardener/pkg/registry/operations/rest"
 	seedmanagementrest "github.com/gardener/gardener/pkg/registry/seedmanagement/rest"
@@ -93,9 +94,10 @@ func (c completedConfig) New() (*GardenerServer, error) {
 		seedManagementAPIGroupInfo = (seedmanagementrest.StorageProvider{}).NewRESTStorage(c.GenericConfig.RESTOptionsGetter)
 		settingsAPIGroupInfo       = (settingsrest.StorageProvider{}).NewRESTStorage(c.GenericConfig.RESTOptionsGetter)
 		operationsAPIGroupInfo     = (operationsrest.StorageProvider{}).NewRESTStorage(c.GenericConfig.RESTOptionsGetter)
+		authenticationAPIGroupInfo = (authenticationrest.StorageProvider{}).NewRESTStorage(c.GenericConfig.RESTOptionsGetter)
 	)
 
-	if err := s.GenericAPIServer.InstallAPIGroups(&coreAPIGroupInfo, &settingsAPIGroupInfo, &seedManagementAPIGroupInfo, &operationsAPIGroupInfo); err != nil {
+	if err := s.GenericAPIServer.InstallAPIGroups(&coreAPIGroupInfo, &settingsAPIGroupInfo, &seedManagementAPIGroupInfo, &operationsAPIGroupInfo, &authenticationAPIGroupInfo); err != nil {
 		return nil, err
 	}
 
