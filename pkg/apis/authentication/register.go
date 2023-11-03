@@ -50,6 +50,7 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&AdminKubeconfigRequest{},
 		&WorkloadIdentity{},
 		&WorkloadIdentityList{},
+		&TokenRequest{},
 	)
 	return nil
 }

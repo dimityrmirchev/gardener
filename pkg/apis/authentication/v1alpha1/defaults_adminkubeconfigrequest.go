@@ -31,3 +31,11 @@ func SetDefaults_AdminKubeconfigRequestSpec(obj *AdminKubeconfigRequestSpec) {
 		obj.ExpirationSeconds = pointer.Int64(60 * 60)
 	}
 }
+
+// SetDefaults_TokenRequestSpecc sets default values for TokenRequestSpec objects.
+func SetDefaults_TokenRequestSpec(obj *TokenRequestRequestSpec) {
+	if obj.ExpirationSeconds == nil {
+		hour := int64(60 * 60)
+		obj.ExpirationSeconds = &hour
+	}
+}

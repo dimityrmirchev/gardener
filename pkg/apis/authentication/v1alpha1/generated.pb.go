@@ -126,10 +126,94 @@ func (m *AdminKubeconfigRequestStatus) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_AdminKubeconfigRequestStatus proto.InternalMessageInfo
 
+func (m *TokenRequest) Reset()      { *m = TokenRequest{} }
+func (*TokenRequest) ProtoMessage() {}
+func (*TokenRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4ad0cb10cdbf25b8, []int{3}
+}
+func (m *TokenRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *TokenRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *TokenRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TokenRequest.Merge(m, src)
+}
+func (m *TokenRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *TokenRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_TokenRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TokenRequest proto.InternalMessageInfo
+
+func (m *TokenRequestRequestSpec) Reset()      { *m = TokenRequestRequestSpec{} }
+func (*TokenRequestRequestSpec) ProtoMessage() {}
+func (*TokenRequestRequestSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4ad0cb10cdbf25b8, []int{4}
+}
+func (m *TokenRequestRequestSpec) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *TokenRequestRequestSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *TokenRequestRequestSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TokenRequestRequestSpec.Merge(m, src)
+}
+func (m *TokenRequestRequestSpec) XXX_Size() int {
+	return m.Size()
+}
+func (m *TokenRequestRequestSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_TokenRequestRequestSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TokenRequestRequestSpec proto.InternalMessageInfo
+
+func (m *TokenRequestStatus) Reset()      { *m = TokenRequestStatus{} }
+func (*TokenRequestStatus) ProtoMessage() {}
+func (*TokenRequestStatus) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4ad0cb10cdbf25b8, []int{5}
+}
+func (m *TokenRequestStatus) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *TokenRequestStatus) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *TokenRequestStatus) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TokenRequestStatus.Merge(m, src)
+}
+func (m *TokenRequestStatus) XXX_Size() int {
+	return m.Size()
+}
+func (m *TokenRequestStatus) XXX_DiscardUnknown() {
+	xxx_messageInfo_TokenRequestStatus.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TokenRequestStatus proto.InternalMessageInfo
+
 func (m *WorkloadIdentity) Reset()      { *m = WorkloadIdentity{} }
 func (*WorkloadIdentity) ProtoMessage() {}
 func (*WorkloadIdentity) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4ad0cb10cdbf25b8, []int{3}
+	return fileDescriptor_4ad0cb10cdbf25b8, []int{6}
 }
 func (m *WorkloadIdentity) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -157,7 +241,7 @@ var xxx_messageInfo_WorkloadIdentity proto.InternalMessageInfo
 func (m *WorkloadIdentityList) Reset()      { *m = WorkloadIdentityList{} }
 func (*WorkloadIdentityList) ProtoMessage() {}
 func (*WorkloadIdentityList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4ad0cb10cdbf25b8, []int{4}
+	return fileDescriptor_4ad0cb10cdbf25b8, []int{7}
 }
 func (m *WorkloadIdentityList) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -185,7 +269,7 @@ var xxx_messageInfo_WorkloadIdentityList proto.InternalMessageInfo
 func (m *WorkloadIdentitySpec) Reset()      { *m = WorkloadIdentitySpec{} }
 func (*WorkloadIdentitySpec) ProtoMessage() {}
 func (*WorkloadIdentitySpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4ad0cb10cdbf25b8, []int{5}
+	return fileDescriptor_4ad0cb10cdbf25b8, []int{8}
 }
 func (m *WorkloadIdentitySpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -213,7 +297,7 @@ var xxx_messageInfo_WorkloadIdentitySpec proto.InternalMessageInfo
 func (m *WorkloadIdentityStatus) Reset()      { *m = WorkloadIdentityStatus{} }
 func (*WorkloadIdentityStatus) ProtoMessage() {}
 func (*WorkloadIdentityStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4ad0cb10cdbf25b8, []int{6}
+	return fileDescriptor_4ad0cb10cdbf25b8, []int{9}
 }
 func (m *WorkloadIdentityStatus) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -242,6 +326,9 @@ func init() {
 	proto.RegisterType((*AdminKubeconfigRequest)(nil), "github.com.gardener.gardener.pkg.apis.authentication.v1alpha1.AdminKubeconfigRequest")
 	proto.RegisterType((*AdminKubeconfigRequestSpec)(nil), "github.com.gardener.gardener.pkg.apis.authentication.v1alpha1.AdminKubeconfigRequestSpec")
 	proto.RegisterType((*AdminKubeconfigRequestStatus)(nil), "github.com.gardener.gardener.pkg.apis.authentication.v1alpha1.AdminKubeconfigRequestStatus")
+	proto.RegisterType((*TokenRequest)(nil), "github.com.gardener.gardener.pkg.apis.authentication.v1alpha1.TokenRequest")
+	proto.RegisterType((*TokenRequestRequestSpec)(nil), "github.com.gardener.gardener.pkg.apis.authentication.v1alpha1.TokenRequestRequestSpec")
+	proto.RegisterType((*TokenRequestStatus)(nil), "github.com.gardener.gardener.pkg.apis.authentication.v1alpha1.TokenRequestStatus")
 	proto.RegisterType((*WorkloadIdentity)(nil), "github.com.gardener.gardener.pkg.apis.authentication.v1alpha1.WorkloadIdentity")
 	proto.RegisterType((*WorkloadIdentityList)(nil), "github.com.gardener.gardener.pkg.apis.authentication.v1alpha1.WorkloadIdentityList")
 	proto.RegisterType((*WorkloadIdentitySpec)(nil), "github.com.gardener.gardener.pkg.apis.authentication.v1alpha1.WorkloadIdentitySpec")
@@ -253,47 +340,51 @@ func init() {
 }
 
 var fileDescriptor_4ad0cb10cdbf25b8 = []byte{
-	// 636 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x55, 0x4d, 0x6f, 0xd3, 0x3e,
-	0x18, 0x6f, 0xda, 0x6d, 0xda, 0xbc, 0x17, 0x6d, 0xde, 0xff, 0x3f, 0x55, 0x05, 0xa5, 0x53, 0x4e,
-	0x13, 0x08, 0x87, 0x4d, 0x08, 0x71, 0xd9, 0x61, 0x99, 0x26, 0x34, 0x60, 0x9a, 0x94, 0x81, 0x10,
-	0x2f, 0x07, 0xdc, 0xc4, 0x4b, 0x4d, 0x97, 0x38, 0xc4, 0x4e, 0x45, 0x85, 0x90, 0x90, 0xf8, 0x02,
-	0x7c, 0xac, 0x72, 0xdb, 0x71, 0xa7, 0x8a, 0x86, 0xdb, 0xbe, 0x03, 0x12, 0xb2, 0x9b, 0x2e, 0x5d,
-	0xd3, 0x8e, 0x49, 0x1d, 0xdc, 0xfc, 0xd8, 0xcf, 0xef, 0xe5, 0x79, 0x49, 0x0b, 0x0e, 0x3c, 0x2a,
-	0xea, 0x71, 0x0d, 0x39, 0xcc, 0x37, 0x3d, 0x1c, 0xb9, 0x24, 0x20, 0x51, 0x76, 0x08, 0x1b, 0x9e,
-	0x89, 0x43, 0xca, 0x4d, 0x1c, 0x8b, 0x3a, 0x09, 0x04, 0x75, 0xb0, 0xa0, 0x2c, 0x30, 0x9b, 0x9b,
-	0xf8, 0x24, 0xac, 0xe3, 0x4d, 0xd3, 0x93, 0x69, 0x58, 0x10, 0x17, 0x85, 0x11, 0x13, 0x0c, 0x6e,
-	0x67, 0x74, 0xa8, 0xcf, 0x92, 0x1d, 0xc2, 0x86, 0x87, 0x24, 0x1d, 0xba, 0x4c, 0x87, 0xfa, 0x74,
-	0x95, 0x7b, 0x83, 0x6e, 0x98, 0xc7, 0x4c, 0xc5, 0x5a, 0x8b, 0x8f, 0x55, 0xa4, 0x02, 0x75, 0xea,
-	0xa9, 0x55, 0x1e, 0x34, 0x1e, 0x71, 0x44, 0x99, 0xb4, 0xe8, 0x63, 0xa7, 0x4e, 0x03, 0x12, 0xb5,
-	0x32, 0xcf, 0x3e, 0x11, 0xd8, 0x6c, 0xe6, 0x3c, 0x56, 0xcc, 0x71, 0xa8, 0x28, 0x0e, 0x04, 0xf5,
-	0x49, 0x0e, 0xf0, 0xf0, 0x4f, 0x00, 0xee, 0xd4, 0x89, 0x8f, 0x87, 0x71, 0xc6, 0xaf, 0x22, 0x58,
-	0xdb, 0x71, 0x7d, 0x1a, 0x3c, 0x8d, 0x6b, 0xc4, 0x61, 0xc1, 0x31, 0xf5, 0x6c, 0xf2, 0x21, 0x26,
-	0x5c, 0xc0, 0x77, 0x60, 0x56, 0xda, 0x73, 0xb1, 0xc0, 0x65, 0x6d, 0x5d, 0xdb, 0x98, 0xdf, 0xba,
-	0x8f, 0x7a, 0x2a, 0x68, 0x50, 0x25, 0xeb, 0x98, 0xcc, 0x46, 0xcd, 0x4d, 0x74, 0x58, 0x7b, 0x4f,
-	0x1c, 0x71, 0x40, 0x04, 0xb6, 0x60, 0xbb, 0x53, 0x2d, 0x24, 0x9d, 0x2a, 0xc8, 0xee, 0xec, 0x0b,
-	0x56, 0xf8, 0x09, 0x4c, 0xf1, 0x90, 0x38, 0xe5, 0xa2, 0x62, 0x7f, 0x85, 0x26, 0x1a, 0x0c, 0x1a,
-	0x5d, 0xc6, 0x51, 0x48, 0x1c, 0x6b, 0x21, 0xb5, 0x31, 0x25, 0x23, 0x5b, 0x89, 0xc2, 0xaf, 0x1a,
-	0x98, 0xe1, 0x02, 0x8b, 0x98, 0x97, 0x4b, 0x4a, 0xff, 0xcd, 0xdf, 0xd1, 0x57, 0x12, 0xd6, 0x52,
-	0xea, 0x60, 0xa6, 0x17, 0xdb, 0xa9, 0xb4, 0x81, 0x41, 0x65, 0xbc, 0x6f, 0xb8, 0x0b, 0x56, 0xc8,
-	0xc7, 0x90, 0x46, 0x4a, 0xe9, 0x48, 0x26, 0xb8, 0x5c, 0xcd, 0xa2, 0x64, 0xfd, 0x9f, 0x74, 0xaa,
-	0x2b, 0x7b, 0xc3, 0x8f, 0x76, 0x3e, 0xdf, 0xf8, 0xae, 0x81, 0xdb, 0x57, 0x79, 0x83, 0x08, 0x80,
-	0xc6, 0xc5, 0x93, 0xa2, 0x5f, 0xb0, 0x96, 0xe4, 0xd0, 0x06, 0x00, 0x03, 0x19, 0xb0, 0x05, 0x56,
-	0x33, 0x95, 0xe7, 0xd4, 0x27, 0x5c, 0x60, 0x3f, 0x4c, 0xa7, 0x78, 0xe7, 0x7a, 0x3b, 0x22, 0x61,
-	0xd6, 0xad, 0xb4, 0x29, 0xab, 0x7b, 0x79, 0x3a, 0x7b, 0x94, 0x86, 0x71, 0x5e, 0x04, 0xcb, 0x2f,
-	0x59, 0xd4, 0x38, 0x61, 0xd8, 0xdd, 0x77, 0xe5, 0x14, 0x44, 0xeb, 0x1f, 0x2c, 0x6a, 0x7c, 0x69,
-	0x51, 0x8f, 0x26, 0x5c, 0x94, 0xe1, 0x02, 0xc6, 0xae, 0xe8, 0xe7, 0xa1, 0x0d, 0x7d, 0x71, 0xd3,
-	0xc2, 0x57, 0xef, 0xe6, 0xb9, 0x06, 0xfe, 0x1b, 0x86, 0x3c, 0xa3, 0x5c, 0xc0, 0xb7, 0xb9, 0x86,
-	0xa3, 0xeb, 0x35, 0x5c, 0xa2, 0x55, 0xbb, 0x97, 0x53, 0xc9, 0xd9, 0xfe, 0xcd, 0x40, 0xb3, 0x05,
-	0x98, 0xa6, 0x82, 0xf8, 0xbc, 0x5c, 0x5c, 0x2f, 0x6d, 0xcc, 0x6f, 0x1d, 0xde, 0x70, 0xd1, 0xd6,
-	0x62, 0xaa, 0x3d, 0xbd, 0x2f, 0x55, 0xec, 0x9e, 0x98, 0xb1, 0x9b, 0xaf, 0x55, 0x7d, 0x82, 0x77,
-	0xc1, 0x1c, 0x8e, 0x5d, 0x4a, 0x02, 0x87, 0xf0, 0xf2, 0xd4, 0x7a, 0x69, 0x63, 0xce, 0x5a, 0x4c,
-	0x3a, 0xd5, 0xb9, 0x9d, 0xfe, 0xa5, 0x9d, 0xbd, 0x1b, 0x2e, 0x58, 0x1b, 0xdd, 0x63, 0xf8, 0x04,
-	0x40, 0x56, 0xe3, 0x24, 0x6a, 0x12, 0xf7, 0x71, 0xef, 0x27, 0x98, 0xb2, 0x20, 0xfd, 0x94, 0x2b,
-	0xa9, 0x21, 0x78, 0x98, 0xcb, 0xb0, 0x47, 0xa0, 0x2c, 0xa7, 0xdd, 0xd5, 0x0b, 0xa7, 0x5d, 0xbd,
-	0x70, 0xd6, 0xd5, 0x0b, 0x5f, 0x12, 0x5d, 0x6b, 0x27, 0xba, 0x76, 0x9a, 0xe8, 0xda, 0x59, 0xa2,
-	0x6b, 0x3f, 0x12, 0x5d, 0xfb, 0xf6, 0x53, 0x2f, 0xbc, 0xde, 0x9e, 0xe8, 0x5f, 0xf3, 0x77, 0x00,
-	0x00, 0x00, 0xff, 0xff, 0xda, 0xde, 0xa2, 0xd6, 0x75, 0x07, 0x00, 0x00,
+	// 702 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x56, 0x4d, 0x4f, 0x13, 0x4d,
+	0x1c, 0xef, 0xb6, 0x40, 0x60, 0xe0, 0x21, 0x30, 0x3c, 0x0f, 0x4f, 0x53, 0xcd, 0x96, 0xd4, 0x0b,
+	0xd1, 0x38, 0x2b, 0xc4, 0x18, 0x2f, 0x1c, 0x58, 0x42, 0x0c, 0x2a, 0x21, 0x2e, 0xa8, 0xf1, 0x25,
+	0xc6, 0xe9, 0xee, 0xb0, 0x1d, 0xcb, 0xbe, 0xb8, 0x33, 0xdb, 0xd0, 0x18, 0x13, 0x13, 0xbf, 0x80,
+	0x1f, 0xc6, 0x0f, 0x81, 0x37, 0x8e, 0x9c, 0x1a, 0x59, 0xe3, 0x85, 0xef, 0x60, 0x62, 0x66, 0x76,
+	0xcb, 0x96, 0x6e, 0x0b, 0x24, 0xad, 0x78, 0x9b, 0x97, 0xff, 0xef, 0x65, 0xfe, 0xf3, 0x9b, 0x64,
+	0xc0, 0xa6, 0x4d, 0x79, 0x2d, 0xac, 0x22, 0xd3, 0x73, 0x34, 0x1b, 0x07, 0x16, 0x71, 0x49, 0x90,
+	0x0e, 0xfc, 0xba, 0xad, 0x61, 0x9f, 0x32, 0x0d, 0x87, 0xbc, 0x46, 0x5c, 0x4e, 0x4d, 0xcc, 0xa9,
+	0xe7, 0x6a, 0x8d, 0x25, 0xbc, 0xe7, 0xd7, 0xf0, 0x92, 0x66, 0x8b, 0x32, 0xcc, 0x89, 0x85, 0xfc,
+	0xc0, 0xe3, 0x1e, 0x5c, 0x49, 0xe9, 0x50, 0x9b, 0x25, 0x1d, 0xf8, 0x75, 0x1b, 0x09, 0x3a, 0x74,
+	0x96, 0x0e, 0xb5, 0xe9, 0x4a, 0xb7, 0x3b, 0xdd, 0x78, 0xb6, 0xa7, 0x49, 0xd6, 0x6a, 0xb8, 0x2b,
+	0x67, 0x72, 0x22, 0x47, 0xb1, 0x5a, 0xe9, 0x6e, 0xfd, 0x3e, 0x43, 0xd4, 0x13, 0x16, 0x1d, 0x6c,
+	0xd6, 0xa8, 0x4b, 0x82, 0x66, 0xea, 0xd9, 0x21, 0x1c, 0x6b, 0x8d, 0x8c, 0xc7, 0x92, 0xd6, 0x0f,
+	0x15, 0x84, 0x2e, 0xa7, 0x0e, 0xc9, 0x00, 0xee, 0x5d, 0x04, 0x60, 0x66, 0x8d, 0x38, 0xb8, 0x1b,
+	0x57, 0xf9, 0x95, 0x07, 0xf3, 0xab, 0x96, 0x43, 0xdd, 0x47, 0x61, 0x95, 0x98, 0x9e, 0xbb, 0x4b,
+	0x6d, 0x83, 0xbc, 0x0f, 0x09, 0xe3, 0xf0, 0x2d, 0x18, 0x17, 0xf6, 0x2c, 0xcc, 0x71, 0x51, 0x59,
+	0x50, 0x16, 0x27, 0x97, 0xef, 0xa0, 0x58, 0x05, 0x75, 0xaa, 0xa4, 0x1d, 0x13, 0xd5, 0xa8, 0xb1,
+	0x84, 0xb6, 0xaa, 0xef, 0x88, 0xc9, 0x37, 0x09, 0xc7, 0x3a, 0x3c, 0x68, 0x95, 0x73, 0x51, 0xab,
+	0x0c, 0xd2, 0x35, 0xe3, 0x94, 0x15, 0x7e, 0x00, 0x23, 0xcc, 0x27, 0x66, 0x31, 0x2f, 0xd9, 0x5f,
+	0xa0, 0x81, 0x2e, 0x06, 0xf5, 0x3e, 0xc6, 0xb6, 0x4f, 0x4c, 0x7d, 0x2a, 0xb1, 0x31, 0x22, 0x66,
+	0x86, 0x14, 0x85, 0x9f, 0x15, 0x30, 0xc6, 0x38, 0xe6, 0x21, 0x2b, 0x16, 0xa4, 0xfe, 0xab, 0x3f,
+	0xa3, 0x2f, 0x25, 0xf4, 0xe9, 0xc4, 0xc1, 0x58, 0x3c, 0x37, 0x12, 0xe9, 0x0a, 0x06, 0xa5, 0xfe,
+	0xbe, 0xe1, 0x1a, 0x98, 0x25, 0xfb, 0x3e, 0x0d, 0xa4, 0xd2, 0xb6, 0x28, 0xb0, 0x98, 0xbc, 0x8b,
+	0x82, 0xfe, 0x5f, 0xd4, 0x2a, 0xcf, 0xae, 0x77, 0x6f, 0x1a, 0xd9, 0xfa, 0xca, 0x37, 0x05, 0x5c,
+	0x3f, 0xcf, 0x1b, 0x44, 0x00, 0xd4, 0x4f, 0xb7, 0x24, 0xfd, 0x94, 0x3e, 0x2d, 0x2e, 0xad, 0x03,
+	0xd0, 0x51, 0x01, 0x9b, 0x60, 0x2e, 0x55, 0xd9, 0xa1, 0x0e, 0x61, 0x1c, 0x3b, 0x7e, 0x72, 0x8b,
+	0x37, 0x2f, 0x97, 0x11, 0x01, 0xd3, 0xaf, 0x25, 0x4d, 0x99, 0x5b, 0xcf, 0xd2, 0x19, 0xbd, 0x34,
+	0x2a, 0x3f, 0xf3, 0x60, 0x6a, 0xc7, 0xab, 0x13, 0xf7, 0xea, 0x42, 0xba, 0x7f, 0x26, 0xa4, 0xcf,
+	0x06, 0x0c, 0x49, 0xa7, 0xf9, 0x8b, 0x12, 0xda, 0xec, 0x0a, 0xe8, 0x93, 0x21, 0x6a, 0x5f, 0x10,
+	0xcb, 0x37, 0xe0, 0xff, 0x3e, 0x4e, 0x87, 0x93, 0xc9, 0xaf, 0x0a, 0x80, 0x59, 0x3b, 0xf0, 0x06,
+	0x18, 0xe5, 0x62, 0x55, 0xf2, 0x4d, 0xe8, 0xff, 0x24, 0xee, 0x46, 0xe3, 0xd2, 0x78, 0xef, 0x6f,
+	0xc6, 0xef, 0x24, 0x0f, 0x66, 0x9e, 0x7b, 0x41, 0x7d, 0xcf, 0xc3, 0xd6, 0x86, 0x25, 0x7a, 0xcc,
+	0x9b, 0x57, 0x10, 0xc1, 0xf0, 0x4c, 0x04, 0xb7, 0x07, 0x8c, 0x41, 0xf7, 0x01, 0xfa, 0xe6, 0xef,
+	0x63, 0x57, 0xfe, 0x9e, 0x0e, 0x5b, 0xf8, 0xfc, 0x0c, 0x9e, 0x28, 0xe0, 0xdf, 0x6e, 0xc8, 0x63,
+	0xca, 0x38, 0x7c, 0x9d, 0x69, 0x38, 0xba, 0x5c, 0xc3, 0x05, 0x5a, 0xb6, 0x7b, 0x26, 0x91, 0x1c,
+	0x6f, 0xaf, 0x74, 0x34, 0x9b, 0x83, 0x51, 0xca, 0x89, 0xc3, 0x8a, 0xf9, 0x85, 0xc2, 0xe2, 0xe4,
+	0xf2, 0xd6, 0x90, 0x0f, 0x9d, 0x86, 0x7a, 0x43, 0xa8, 0x18, 0xb1, 0x58, 0x65, 0x2d, 0x7b, 0x56,
+	0xf9, 0xda, 0x6e, 0x81, 0x09, 0x1c, 0x5a, 0x94, 0xb8, 0x26, 0x61, 0xc5, 0x91, 0x85, 0x82, 0x78,
+	0x15, 0x51, 0xab, 0x3c, 0xb1, 0xda, 0x5e, 0x34, 0xd2, 0xfd, 0x8a, 0x05, 0xe6, 0x7b, 0xf7, 0x18,
+	0x3e, 0x04, 0xd0, 0xab, 0x32, 0x12, 0x34, 0x88, 0xf5, 0x20, 0xfe, 0x01, 0x50, 0xcf, 0x4d, 0x5e,
+	0x6d, 0x29, 0x31, 0x04, 0xb7, 0x32, 0x15, 0x46, 0x0f, 0x94, 0x6e, 0x1e, 0x1c, 0xab, 0xb9, 0xc3,
+	0x63, 0x35, 0x77, 0x74, 0xac, 0xe6, 0x3e, 0x45, 0xaa, 0x72, 0x10, 0xa9, 0xca, 0x61, 0xa4, 0x2a,
+	0x47, 0x91, 0xaa, 0x7c, 0x8f, 0x54, 0xe5, 0xcb, 0x0f, 0x35, 0xf7, 0x72, 0x65, 0xa0, 0x4f, 0xdb,
+	0xef, 0x00, 0x00, 0x00, 0xff, 0xff, 0xcf, 0x13, 0x8f, 0x69, 0xf4, 0x09, 0x00, 0x00,
 }
 
 func (m *AdminKubeconfigRequest) Marshal() (dAtA []byte, err error) {
@@ -414,6 +505,125 @@ func (m *AdminKubeconfigRequestStatus) MarshalToSizedBuffer(dAtA []byte) (int, e
 		i--
 		dAtA[i] = 0xa
 	}
+	return len(dAtA) - i, nil
+}
+
+func (m *TokenRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *TokenRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TokenRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size, err := m.Status.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintGenerated(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x1a
+	{
+		size, err := m.Spec.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintGenerated(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x12
+	{
+		size, err := m.ObjectMeta.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintGenerated(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *TokenRequestRequestSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *TokenRequestRequestSpec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TokenRequestRequestSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ExpirationSeconds != nil {
+		i = encodeVarintGenerated(dAtA, i, uint64(*m.ExpirationSeconds))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *TokenRequestStatus) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *TokenRequestStatus) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TokenRequestStatus) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size, err := m.ExpirationTimestamp.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintGenerated(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x12
+	i -= len(m.Token)
+	copy(dAtA[i:], m.Token)
+	i = encodeVarintGenerated(dAtA, i, uint64(len(m.Token)))
+	i--
+	dAtA[i] = 0xa
 	return len(dAtA) - i, nil
 }
 
@@ -628,6 +838,46 @@ func (m *AdminKubeconfigRequestStatus) Size() (n int) {
 	return n
 }
 
+func (m *TokenRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = m.ObjectMeta.Size()
+	n += 1 + l + sovGenerated(uint64(l))
+	l = m.Spec.Size()
+	n += 1 + l + sovGenerated(uint64(l))
+	l = m.Status.Size()
+	n += 1 + l + sovGenerated(uint64(l))
+	return n
+}
+
+func (m *TokenRequestRequestSpec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ExpirationSeconds != nil {
+		n += 1 + sovGenerated(uint64(*m.ExpirationSeconds))
+	}
+	return n
+}
+
+func (m *TokenRequestStatus) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Token)
+	n += 1 + l + sovGenerated(uint64(l))
+	l = m.ExpirationTimestamp.Size()
+	n += 1 + l + sovGenerated(uint64(l))
+	return n
+}
+
 func (m *WorkloadIdentity) Size() (n int) {
 	if m == nil {
 		return 0
@@ -719,6 +969,39 @@ func (this *AdminKubeconfigRequestStatus) String() string {
 	}
 	s := strings.Join([]string{`&AdminKubeconfigRequestStatus{`,
 		`Kubeconfig:` + valueToStringGenerated(this.Kubeconfig) + `,`,
+		`ExpirationTimestamp:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ExpirationTimestamp), "Time", "v1.Time", 1), `&`, ``, 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TokenRequest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TokenRequest{`,
+		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v1.ObjectMeta", 1), `&`, ``, 1) + `,`,
+		`Spec:` + strings.Replace(strings.Replace(this.Spec.String(), "TokenRequestRequestSpec", "TokenRequestRequestSpec", 1), `&`, ``, 1) + `,`,
+		`Status:` + strings.Replace(strings.Replace(this.Status.String(), "TokenRequestStatus", "TokenRequestStatus", 1), `&`, ``, 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TokenRequestRequestSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TokenRequestRequestSpec{`,
+		`ExpirationSeconds:` + valueToStringGenerated(this.ExpirationSeconds) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TokenRequestStatus) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TokenRequestStatus{`,
+		`Token:` + fmt.Sprintf("%v", this.Token) + `,`,
 		`ExpirationTimestamp:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ExpirationTimestamp), "Time", "v1.Time", 1), `&`, ``, 1) + `,`,
 		`}`,
 	}, "")
@@ -1061,6 +1344,340 @@ func (m *AdminKubeconfigRequestStatus) Unmarshal(dAtA []byte) error {
 			if m.Kubeconfig == nil {
 				m.Kubeconfig = []byte{}
 			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ExpirationTimestamp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.ExpirationTimestamp.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *TokenRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: TokenRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: TokenRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ObjectMeta", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.ObjectMeta.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Spec", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Spec.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Status.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *TokenRequestRequestSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: TokenRequestRequestSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: TokenRequestRequestSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ExpirationSeconds", wireType)
+			}
+			var v int64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.ExpirationSeconds = &v
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *TokenRequestStatus) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: TokenRequestStatus: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: TokenRequestStatus: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Token", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Token = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {

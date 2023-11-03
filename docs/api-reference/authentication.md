@@ -257,6 +257,159 @@ Kubernetes meta/v1.Time
 </tr>
 </tbody>
 </table>
+<h3 id="authentication.gardener.cloud/v1alpha1.TokenRequest">TokenRequest
+</h3>
+<p>
+<p>TokenRequest can be used to request a token with for a specific workload identity.</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>metadata</code></br>
+<em>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#objectmeta-v1-meta">
+Kubernetes meta/v1.ObjectMeta
+</a>
+</em>
+</td>
+<td>
+<p>Standard object metadata.</p>
+Refer to the Kubernetes API documentation for the fields of the
+<code>metadata</code> field.
+</td>
+</tr>
+<tr>
+<td>
+<code>spec</code></br>
+<em>
+<a href="#authentication.gardener.cloud/v1alpha1.TokenRequestRequestSpec">
+TokenRequestRequestSpec
+</a>
+</em>
+</td>
+<td>
+<p>Spec is the specification of the TokenRequest.</p>
+<br/>
+<br/>
+<table>
+<tr>
+<td>
+<code>expirationSeconds</code></br>
+<em>
+int64
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>ExpirationSeconds is the requested validity duration of the credential. The
+credential issuer may return a credential with a different validity duration so a
+client needs to check the &lsquo;expirationTimestamp&rsquo; field in a response.
+Defaults to 1 hour.</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<code>status</code></br>
+<em>
+<a href="#authentication.gardener.cloud/v1alpha1.TokenRequestStatus">
+TokenRequestStatus
+</a>
+</em>
+</td>
+<td>
+<p>Status is the status of the TokenRequest.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="authentication.gardener.cloud/v1alpha1.TokenRequestRequestSpec">TokenRequestRequestSpec
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#authentication.gardener.cloud/v1alpha1.TokenRequest">TokenRequest</a>)
+</p>
+<p>
+<p>TokenRequestRequestSpec contains the expiration time of the token.</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>expirationSeconds</code></br>
+<em>
+int64
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>ExpirationSeconds is the requested validity duration of the credential. The
+credential issuer may return a credential with a different validity duration so a
+client needs to check the &lsquo;expirationTimestamp&rsquo; field in a response.
+Defaults to 1 hour.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="authentication.gardener.cloud/v1alpha1.TokenRequestStatus">TokenRequestStatus
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#authentication.gardener.cloud/v1alpha1.TokenRequest">TokenRequest</a>)
+</p>
+<p>
+<p>TokenRequestStatus is the status of the TokenRequest containing
+the token.</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>token</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<p>Token is the bearer token.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>expirationTimestamp</code></br>
+<em>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#time-v1-meta">
+Kubernetes meta/v1.Time
+</a>
+</em>
+</td>
+<td>
+<p>ExpirationTimestamp is the expiration timestamp of the returned credential.</p>
+</td>
+</tr>
+</tbody>
+</table>
 <h3 id="authentication.gardener.cloud/v1alpha1.WorkloadIdentitySpec">WorkloadIdentitySpec
 </h3>
 <p>

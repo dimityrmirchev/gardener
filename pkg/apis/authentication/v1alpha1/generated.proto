@@ -60,6 +60,38 @@ message AdminKubeconfigRequestStatus {
   optional k8s.io.apimachinery.pkg.apis.meta.v1.Time expirationTimestamp = 2;
 }
 
+// TokenRequest can be used to request a token with for a specific workload identity.
+message TokenRequest {
+  // Standard object metadata.
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
+
+  // Spec is the specification of the TokenRequest.
+  optional TokenRequestRequestSpec spec = 2;
+
+  // Status is the status of the TokenRequest.
+  optional TokenRequestStatus status = 3;
+}
+
+// TokenRequestRequestSpec contains the expiration time of the token.
+message TokenRequestRequestSpec {
+  // ExpirationSeconds is the requested validity duration of the credential. The
+  // credential issuer may return a credential with a different validity duration so a
+  // client needs to check the 'expirationTimestamp' field in a response.
+  // Defaults to 1 hour.
+  // +optional
+  optional int64 expirationSeconds = 1;
+}
+
+// TokenRequestStatus is the status of the TokenRequest containing
+// the token.
+message TokenRequestStatus {
+  // Token is the bearer token.
+  optional string token = 1;
+
+  // ExpirationTimestamp is the expiration timestamp of the returned credential.
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time expirationTimestamp = 2;
+}
+
 // WorkloadIdentity holds certain properties related to Gardener managed workload communicating with external systems.
 message WorkloadIdentity {
   // Standard object metadata.
