@@ -47,6 +47,7 @@ func (p StorageProvider) v1alpha1Storage(restOptionsGetter generic.RESTOptionsGe
 	workloadIdentityStorage := workloadidentitystore.NewStorage(restOptionsGetter)
 	storage["workloadidentities"] = workloadIdentityStorage.WorkloadIdentity
 	storage["workloadidentities/status"] = workloadIdentityStorage.Status
+	storage["workloadidentities/token"] = workloadIdentityStorage.TokenRequest
 
 	return storage
 }

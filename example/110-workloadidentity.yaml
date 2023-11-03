@@ -1,0 +1,9 @@
+---
+apiVersion: authentication.gardener.cloud/v1alpha1
+kind: WorkloadIdentity
+metadata:
+  name: example-workload-identity
+  namespace: garden-dev
+spec:
+  audiences:
+  - "foo"

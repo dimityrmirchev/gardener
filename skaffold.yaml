@@ -108,6 +108,9 @@ build:
         - pkg/gardenlet/apis/config/validation
         - pkg/logger
         - pkg/openapi
+        - pkg/registry/authentication
+        - pkg/registry/authentication/rest
+        - pkg/registry/authentication/workloadidentity
         - pkg/registry/core/backupbucket
         - pkg/registry/core/backupbucket/storage
         - pkg/registry/core/backupentry

@@ -36,6 +36,7 @@ type REST struct {
 type WorkloadIdentityStorage struct {
 	WorkloadIdentity *REST
 	Status           *StatusREST
+	TokenRequest     *TokenRequestREST
 }
 
 // NewStorage creates a new WorkloadIdentityStorage object.
@@ -45,6 +46,7 @@ func NewStorage(optsGetter generic.RESTOptionsGetter) WorkloadIdentityStorage {
 	return WorkloadIdentityStorage{
 		WorkloadIdentity: rest,
 		Status:           statusRest,
+		TokenRequest:     &TokenRequestREST{},
 	}
 }
 
