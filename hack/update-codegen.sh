@@ -227,7 +227,7 @@ authentication_groups() {
     -h "${PROJECT_ROOT}/hack/LICENSE_BOILERPLATE.txt"
 
   bash "${PROJECT_ROOT}"/hack/generate-internal-groups.sh \
-    deepcopy,defaulter,conversion \
+    deepcopy,defaulter,conversion,client,lister,informer \
     github.com/gardener/gardener/pkg/client/authentication \
     github.com/gardener/gardener/pkg/apis \
     github.com/gardener/gardener/pkg/apis \

@@ -19,22 +19,22 @@ limitations under the License.
 package fake
 
 import (
-	v1alpha1 "github.com/gardener/gardener/pkg/client/authentication/clientset/versioned/typed/authentication/v1alpha1"
+	internalversion "github.com/gardener/gardener/pkg/client/authentication/clientset/internalversion/typed/authentication/internalversion"
 	rest "k8s.io/client-go/rest"
 	testing "k8s.io/client-go/testing"
 )
 
-type FakeAuthenticationV1alpha1 struct {
+type FakeAuthentication struct {
 	*testing.Fake
 }
 
-func (c *FakeAuthenticationV1alpha1) WorkloadIdentities(namespace string) v1alpha1.WorkloadIdentityInterface {
+func (c *FakeAuthentication) WorkloadIdentities(namespace string) internalversion.WorkloadIdentityInterface {
 	return &FakeWorkloadIdentities{c, namespace}
 }
 
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
-func (c *FakeAuthenticationV1alpha1) RESTClient() rest.Interface {
+func (c *FakeAuthentication) RESTClient() rest.Interface {
 	var ret *rest.RESTClient
 	return ret
 }

@@ -18,14 +18,6 @@ limitations under the License.
 
 package v1alpha1
 
-// AdminKubeconfigRequestListerExpansion allows custom methods to be added to
-// AdminKubeconfigRequestLister.
-type AdminKubeconfigRequestListerExpansion interface{}
-
-// AdminKubeconfigRequestNamespaceListerExpansion allows custom methods to be added to
-// AdminKubeconfigRequestNamespaceLister.
-type AdminKubeconfigRequestNamespaceListerExpansion interface{}
-
 // WorkloadIdentityListerExpansion allows custom methods to be added to
 // WorkloadIdentityLister.
 type WorkloadIdentityListerExpansion interface{}

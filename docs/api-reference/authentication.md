@@ -10,103 +10,8 @@
 </p>
 Resource Types:
 <ul><li>
-<a href="#authentication.gardener.cloud/v1alpha1.AdminKubeconfigRequest">AdminKubeconfigRequest</a>
-</li><li>
 <a href="#authentication.gardener.cloud/v1alpha1.WorkloadIdentity">WorkloadIdentity</a>
 </li></ul>
-<h3 id="authentication.gardener.cloud/v1alpha1.AdminKubeconfigRequest">AdminKubeconfigRequest
-</h3>
-<p>
-<p>AdminKubeconfigRequest can be used to request a kubeconfig with admin credentials
-for a Shoot cluster.</p>
-</p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<code>apiVersion</code></br>
-string</td>
-<td>
-<code>
-authentication.gardener.cloud/v1alpha1
-</code>
-</td>
-</tr>
-<tr>
-<td>
-<code>kind</code></br>
-string
-</td>
-<td><code>AdminKubeconfigRequest</code></td>
-</tr>
-<tr>
-<td>
-<code>metadata</code></br>
-<em>
-<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#objectmeta-v1-meta">
-Kubernetes meta/v1.ObjectMeta
-</a>
-</em>
-</td>
-<td>
-<p>Standard object metadata.</p>
-Refer to the Kubernetes API documentation for the fields of the
-<code>metadata</code> field.
-</td>
-</tr>
-<tr>
-<td>
-<code>spec</code></br>
-<em>
-<a href="#authentication.gardener.cloud/v1alpha1.AdminKubeconfigRequestSpec">
-AdminKubeconfigRequestSpec
-</a>
-</em>
-</td>
-<td>
-<p>Spec is the specification of the AdminKubeconfigRequest.</p>
-<br/>
-<br/>
-<table>
-<tr>
-<td>
-<code>expirationSeconds</code></br>
-<em>
-int64
-</em>
-</td>
-<td>
-<em>(Optional)</em>
-<p>ExpirationSeconds is the requested validity duration of the credential. The
-credential issuer may return a credential with a different validity duration so a
-client needs to check the &lsquo;expirationTimestamp&rsquo; field in a response.
-Defaults to 1 hour.</p>
-</td>
-</tr>
-</table>
-</td>
-</tr>
-<tr>
-<td>
-<code>status</code></br>
-<em>
-<a href="#authentication.gardener.cloud/v1alpha1.AdminKubeconfigRequestStatus">
-AdminKubeconfigRequestStatus
-</a>
-</em>
-</td>
-<td>
-<p>Status is the status of the AdminKubeconfigRequest.</p>
-</td>
-</tr>
-</tbody>
-</table>
 <h3 id="authentication.gardener.cloud/v1alpha1.WorkloadIdentity">WorkloadIdentity
 </h3>
 <p>
@@ -194,6 +99,82 @@ WorkloadIdentityStatus
 <td>
 <em>(Optional)</em>
 <p>Most recently observed status of the WorkloadIdentity.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="authentication.gardener.cloud/v1alpha1.AdminKubeconfigRequest">AdminKubeconfigRequest
+</h3>
+<p>
+<p>AdminKubeconfigRequest can be used to request a kubeconfig with admin credentials
+for a Shoot cluster.</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>metadata</code></br>
+<em>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#objectmeta-v1-meta">
+Kubernetes meta/v1.ObjectMeta
+</a>
+</em>
+</td>
+<td>
+<p>Standard object metadata.</p>
+Refer to the Kubernetes API documentation for the fields of the
+<code>metadata</code> field.
+</td>
+</tr>
+<tr>
+<td>
+<code>spec</code></br>
+<em>
+<a href="#authentication.gardener.cloud/v1alpha1.AdminKubeconfigRequestSpec">
+AdminKubeconfigRequestSpec
+</a>
+</em>
+</td>
+<td>
+<p>Spec is the specification of the AdminKubeconfigRequest.</p>
+<br/>
+<br/>
+<table>
+<tr>
+<td>
+<code>expirationSeconds</code></br>
+<em>
+int64
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>ExpirationSeconds is the requested validity duration of the credential. The
+credential issuer may return a credential with a different validity duration so a
+client needs to check the &lsquo;expirationTimestamp&rsquo; field in a response.
+Defaults to 1 hour.</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<code>status</code></br>
+<em>
+<a href="#authentication.gardener.cloud/v1alpha1.AdminKubeconfigRequestStatus">
+AdminKubeconfigRequestStatus
+</a>
+</em>
+</td>
+<td>
+<p>Status is the status of the AdminKubeconfigRequest.</p>
 </td>
 </tr>
 </tbody>
