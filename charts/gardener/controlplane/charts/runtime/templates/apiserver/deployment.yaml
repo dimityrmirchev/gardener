@@ -38,6 +38,7 @@ spec:
         {{- if (include "gardener-apiserver.hasAdmissionPlugins" .) }}
         checksum/configmap-gardener-apiserver-admission-config: {{ include (print $.Template.BasePath "/apiserver/configmap-admission-config.yaml") . | sha256sum }}
         {{- end }}
+        checksum/secret-gardener-apiserver-workload-identity-signing-key: {{ include (print $.Template.BasePath "/apiserver/secret-workload-identity-signing-key.yaml") . | sha256sum }}
         {{- if .Values.global.apiserver.podAnnotations }}
 {{ toYaml .Values.global.apiserver.podAnnotations | indent 8 }}
         {{- end }}
@@ -266,6 +267,8 @@ spec:
         - --tls-cert-file=/etc/gardener-apiserver/srv/gardener-apiserver.crt
         - --tls-private-key-file=/etc/gardener-apiserver/srv/gardener-apiserver.key
         {{- end }}
+        - --workload-identity-issuer={{ required ".Values.global.apiserver.workloadIdentity.issuer is required" .Values.global.apiserver.workloadIdentity.issuer }}
+        - --workload-identity-signing-key-file=/etc/gardener-apiserver/srv/wi-signer/signingKey
         {{- include "gardener-apiserver.watchCacheSizes" . | indent 8 }}
         - --log-level={{ .Values.global.apiserver.logLevel | default "info"  }}
         - --log-format={{ .Values.global.apiserver.logFormat | default "json"  }}
@@ -350,6 +353,8 @@ spec:
         - name: gardener-audit-webhook-config
           mountPath: /etc/gardener-apiserver/auditwebhook
         {{- end }}
+        - name: gardener-apiserver-workload-identity-key
+          mountPath: /etc/gardener-apiserver/srv/wi-signer/
         {{- if (include "gardener-apiserver.hasAdmissionPlugins" .) }}
         - name: gardener-apiserver-admission-config
           mountPath: /etc/gardener-apiserver/admission
@@ -456,6 +461,9 @@ spec:
         secret:
           secretName: gardener-audit-webhook-config
       {{- end }}
+      - name: gardener-apiserver-workload-identity-key
+        secret:
+          secretName: gardener-apiserver-workload-identity-key
       {{- if (include "gardener-apiserver.hasAdmissionPlugins" .) }}
       - name: gardener-apiserver-admission-config
         configMap:

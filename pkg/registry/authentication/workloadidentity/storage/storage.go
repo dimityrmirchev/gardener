@@ -22,6 +22,7 @@ import (
 	"k8s.io/apiserver/pkg/registry/generic"
 	genericregistry "k8s.io/apiserver/pkg/registry/generic/registry"
 	"k8s.io/apiserver/pkg/registry/rest"
+	"k8s.io/kubernetes/pkg/serviceaccount"
 
 	"github.com/gardener/gardener/pkg/apis/authentication"
 	"github.com/gardener/gardener/pkg/registry/authentication/workloadidentity"
@@ -40,13 +41,13 @@ type WorkloadIdentityStorage struct {
 }
 
 // NewStorage creates a new WorkloadIdentityStorage object.
-func NewStorage(optsGetter generic.RESTOptionsGetter) WorkloadIdentityStorage {
+func NewStorage(optsGetter generic.RESTOptionsGetter, tokenGenerator serviceaccount.TokenGenerator) WorkloadIdentityStorage {
 	rest, statusRest := NewREST(optsGetter)
 
 	return WorkloadIdentityStorage{
 		WorkloadIdentity: rest,
 		Status:           statusRest,
-		TokenRequest:     &TokenRequestREST{},
+		TokenRequest:     NewTokenRequestREST(tokenGenerator, rest.Store),
 	}
 }
 

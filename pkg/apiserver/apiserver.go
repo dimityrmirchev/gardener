@@ -22,6 +22,8 @@ import (
 	"k8s.io/apimachinery/pkg/util/sets"
 	genericapiserver "k8s.io/apiserver/pkg/server"
 	kubeinformers "k8s.io/client-go/informers"
+	"k8s.io/client-go/util/keyutil"
+	"k8s.io/kubernetes/pkg/serviceaccount"
 
 	gardencoreinformers "github.com/gardener/gardener/pkg/client/core/informers/internalversion"
 	"github.com/gardener/gardener/pkg/logger"
@@ -36,6 +38,13 @@ import (
 type ExtraConfig struct {
 	AdminKubeconfigMaxExpiration time.Duration
 	CredentialsRotationInterval  time.Duration
+	WorkloadIdentityConfig       WorkloadIdentityConfig
+}
+
+// WorkloadIdentityConfig contains Gardener API server configuration related to workload identities and their metadata server.
+type WorkloadIdentityConfig struct {
+	Issuer         string
+	SigningKeyFile string
 }
 
 // Config contains Gardener API server configuration.
@@ -83,6 +92,16 @@ func (c completedConfig) New() (*GardenerServer, error) {
 		return nil, err
 	}
 
+	wiSigningKey, err := keyutil.PrivateKeyFromFile(c.ExtraConfig.WorkloadIdentityConfig.SigningKeyFile)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse workload-identity-signing-key-file: %w", err)
+	}
+
+	wiTokenGenerator, err := serviceaccount.JWTTokenGenerator(c.ExtraConfig.WorkloadIdentityConfig.Issuer, wiSigningKey)
+	if err != nil {
+		return nil, fmt.Errorf("failed to build token generator: %w", err)
+	}
+
 	var (
 		s                = &GardenerServer{GenericAPIServer: genericServer}
 		coreAPIGroupInfo = (corerest.StorageProvider{
@@ -94,7 +113,7 @@ func (c completedConfig) New() (*GardenerServer, error) {
 		seedManagementAPIGroupInfo = (seedmanagementrest.StorageProvider{}).NewRESTStorage(c.GenericConfig.RESTOptionsGetter)
 		settingsAPIGroupInfo       = (settingsrest.StorageProvider{}).NewRESTStorage(c.GenericConfig.RESTOptionsGetter)
 		operationsAPIGroupInfo     = (operationsrest.StorageProvider{}).NewRESTStorage(c.GenericConfig.RESTOptionsGetter)
-		authenticationAPIGroupInfo = (authenticationrest.StorageProvider{}).NewRESTStorage(c.GenericConfig.RESTOptionsGetter)
+		authenticationAPIGroupInfo = (authenticationrest.StorageProvider{}).NewRESTStorage(c.GenericConfig.RESTOptionsGetter, wiTokenGenerator)
 	)
 
 	if err := s.GenericAPIServer.InstallAPIGroups(&coreAPIGroupInfo, &settingsAPIGroupInfo, &seedManagementAPIGroupInfo, &operationsAPIGroupInfo, &authenticationAPIGroupInfo); err != nil {
@@ -109,6 +128,9 @@ type ExtraOptions struct {
 	ClusterIdentity              string
 	AdminKubeconfigMaxExpiration time.Duration
 	CredentialsRotationInterval  time.Duration
+
+	WorkloadIdentityIssuer         string
+	WorkloadIdentitySigningKeyFile string
 
 	LogLevel  string
 	LogFormat string
@@ -131,6 +153,16 @@ func (o *ExtraOptions) Validate() []error {
 		allErrors = append(allErrors, fmt.Errorf("--shoot-credentials-rotation-interval must be between 24 hours and 2^32 seconds"))
 	}
 
+	if len(o.WorkloadIdentityIssuer) == 0 {
+		allErrors = append(allErrors, fmt.Errorf("--workload-identity-issuer must be set"))
+
+	}
+
+	if len(o.WorkloadIdentitySigningKeyFile) == 0 {
+		allErrors = append(allErrors, fmt.Errorf("--workload-identity-signing-key-file must be set"))
+
+	}
+
 	if !sets.New(logger.AllLogLevels...).Has(o.LogLevel) {
 		allErrors = append(allErrors, fmt.Errorf("invalid --log-level: %s", o.LogLevel))
 	}
@@ -148,6 +180,9 @@ func (o *ExtraOptions) AddFlags(fs *pflag.FlagSet) {
 	fs.DurationVar(&o.AdminKubeconfigMaxExpiration, "shoot-admin-kubeconfig-max-expiration", time.Hour*24, "The maximum validity duration of a credential requested to a Shoot by an AdminKubeconfigRequest. If an otherwise valid AdminKubeconfigRequest with a validity duration larger than this value is requested, a credential will be issued with a validity duration of this value.")
 	fs.DurationVar(&o.CredentialsRotationInterval, "shoot-credentials-rotation-interval", time.Hour*24*90, "The duration after the initial shoot creation or the last credentials rotation when a client warning for the next credentials rotation is issued.")
 
+	fs.StringVar(&o.WorkloadIdentityIssuer, "workload-identity-issuer", "", "Identifier of the workload identity token issuer. The issuer will assert this identifier in the \"iss\" claim of issued tokens.")
+	fs.StringVar(&o.WorkloadIdentitySigningKeyFile, "workload-identity-signing-key-file", "", "Path to the file that contains the current private key of the workload identity token issuer. The issuer will sign issued ID tokens with this private key.")
+
 	fs.StringVar(&o.LogLevel, "log-level", "info", "The level/severity for the logs. Must be one of [info,debug,error]")
 	fs.StringVar(&o.LogFormat, "log-format", "json", "The format for the logs. Must be one of [json,text]")
 }
@@ -156,6 +191,9 @@ func (o *ExtraOptions) AddFlags(fs *pflag.FlagSet) {
 func (o *ExtraOptions) ApplyTo(c *Config) error {
 	c.ExtraConfig.AdminKubeconfigMaxExpiration = o.AdminKubeconfigMaxExpiration
 	c.ExtraConfig.CredentialsRotationInterval = o.CredentialsRotationInterval
+
+	c.ExtraConfig.WorkloadIdentityConfig.Issuer = o.WorkloadIdentityIssuer
+	c.ExtraConfig.WorkloadIdentityConfig.SigningKeyFile = o.WorkloadIdentitySigningKeyFile
 
 	return nil
 }

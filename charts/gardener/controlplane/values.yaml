@@ -154,6 +154,12 @@ global:
       audience: ""
   # shootAdminKubeconfigMaxExpiration: 24h
   # shootCredentialsRotationInterval: 2160h
+    workloadIdentity:
+      issuer: https://not.a.valid.dns.record.cluster.local
+      signingKey: |
+        -----BEGIN PRIVATE KEY-----
+        ...
+        -----END PRIVATE KEY-----
     vpa: false
     hvpa:
       enabled: false

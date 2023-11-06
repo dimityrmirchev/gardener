@@ -17,6 +17,9 @@
 package validation
 
 import (
+	"math"
+	"time"
+
 	apivalidation "k8s.io/apimachinery/pkg/api/validation"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 
@@ -49,5 +52,20 @@ func ValidateWorkloadIdentityUpdate(new, old *authentication.WorkloadIdentity) f
 func ValidateWorkloadIdentityStatusUpdate(_, _ authentication.WorkloadIdentityStatus) field.ErrorList {
 	allErrs := field.ErrorList{}
 
+	return allErrs
+}
+
+// ValidateTokenRequest validates a TokenRequest.
+func ValidateTokenRequest(tr *authentication.TokenRequest) field.ErrorList {
+	allErrs := field.ErrorList{}
+	specPath := field.NewPath("spec")
+
+	const min = 10 * time.Minute
+	if tr.Spec.ExpirationSeconds < int64(min.Seconds()) {
+		allErrs = append(allErrs, field.Invalid(specPath.Child("expirationSeconds"), tr.Spec.ExpirationSeconds, "may not specify a duration less than 10 minutes"))
+	}
+	if tr.Spec.ExpirationSeconds > math.MaxUint32 {
+		allErrs = append(allErrs, field.TooLong(specPath.Child("expirationSeconds"), tr.Spec.ExpirationSeconds, math.MaxUint32))
+	}
 	return allErrs
 }

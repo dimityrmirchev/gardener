@@ -19,6 +19,7 @@ import (
 	"k8s.io/apiserver/pkg/registry/generic"
 	"k8s.io/apiserver/pkg/registry/rest"
 	genericapiserver "k8s.io/apiserver/pkg/server"
+	"k8s.io/kubernetes/pkg/serviceaccount"
 
 	"github.com/gardener/gardener/pkg/api"
 	"github.com/gardener/gardener/pkg/apis/authentication"
@@ -27,12 +28,14 @@ import (
 )
 
 // StorageProvider contains configurations related to the authentication resources.
-type StorageProvider struct{}
+type StorageProvider struct {
+	TokenSigner serviceaccount.TokenGenerator
+}
 
 // NewRESTStorage creates a new API group info object and registers the v1alpha1 authentication storage.
-func (p StorageProvider) NewRESTStorage(restOptionsGetter generic.RESTOptionsGetter) genericapiserver.APIGroupInfo {
+func (p StorageProvider) NewRESTStorage(restOptionsGetter generic.RESTOptionsGetter, tokenGenerator serviceaccount.TokenGenerator) genericapiserver.APIGroupInfo {
 	apiGroupInfo := genericapiserver.NewDefaultAPIGroupInfo(authentication.GroupName, api.Scheme, metav1.ParameterCodec, api.Codecs)
-	apiGroupInfo.VersionedResourcesStorageMap[gardenauthv1beta1.SchemeGroupVersion.Version] = p.v1alpha1Storage(restOptionsGetter)
+	apiGroupInfo.VersionedResourcesStorageMap[gardenauthv1beta1.SchemeGroupVersion.Version] = p.v1alpha1Storage(restOptionsGetter, tokenGenerator)
 	return apiGroupInfo
 }
 
@@ -41,10 +44,10 @@ func (p StorageProvider) GroupName() string {
 	return authentication.GroupName
 }
 
-func (p StorageProvider) v1alpha1Storage(restOptionsGetter generic.RESTOptionsGetter) map[string]rest.Storage {
+func (p StorageProvider) v1alpha1Storage(restOptionsGetter generic.RESTOptionsGetter, tokenGenerator serviceaccount.TokenGenerator) map[string]rest.Storage {
 	storage := map[string]rest.Storage{}
 
-	workloadIdentityStorage := workloadidentitystore.NewStorage(restOptionsGetter)
+	workloadIdentityStorage := workloadidentitystore.NewStorage(restOptionsGetter, tokenGenerator)
 	storage["workloadidentities"] = workloadIdentityStorage.WorkloadIdentity
 	storage["workloadidentities/status"] = workloadIdentityStorage.Status
 	storage["workloadidentities/token"] = workloadIdentityStorage.TokenRequest

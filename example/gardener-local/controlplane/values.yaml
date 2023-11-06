@@ -147,6 +147,61 @@ global:
           adePGltijSbPOCOx1MSV///pjk7CCblYNa3/etxMBXhTlc6lRuoLp10=
           -----END RSA PRIVATE KEY-----
     # speed-up re-deploying of gardener-apiserver
+    workloadIdentity:
+      issuer: https://not.a.valid.dns.record.cluster.local
+      signingKey: |
+        -----BEGIN PRIVATE KEY-----
+        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
+        TxNWqyCTaAkioZJg/Vh5i6msjlJ6QQ==
+        -----END PRIVATE KEY-----
     minReadySeconds: 0
     enableAdmissionPlugins:
     - ShootVPAEnabledByDefault

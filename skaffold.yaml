@@ -111,6 +111,7 @@ build:
         - pkg/registry/authentication
         - pkg/registry/authentication/rest
         - pkg/registry/authentication/workloadidentity
+        - pkg/registry/authentication/workloadidentity/storage
         - pkg/registry/core/backupbucket
         - pkg/registry/core/backupbucket/storage
         - pkg/registry/core/backupentry
