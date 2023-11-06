@@ -289,8 +289,8 @@ Refer to the Kubernetes API documentation for the fields of the
 <td>
 <code>spec</code></br>
 <em>
-<a href="#authentication.gardener.cloud/v1alpha1.TokenRequestRequestSpec">
-TokenRequestRequestSpec
+<a href="#authentication.gardener.cloud/v1alpha1.TokenRequestSpec">
+TokenRequestSpec
 </a>
 </em>
 </td>
@@ -332,14 +332,14 @@ TokenRequestStatus
 </tr>
 </tbody>
 </table>
-<h3 id="authentication.gardener.cloud/v1alpha1.TokenRequestRequestSpec">TokenRequestRequestSpec
+<h3 id="authentication.gardener.cloud/v1alpha1.TokenRequestSpec">TokenRequestSpec
 </h3>
 <p>
 (<em>Appears on:</em>
 <a href="#authentication.gardener.cloud/v1alpha1.TokenRequest">TokenRequest</a>)
 </p>
 <p>
-<p>TokenRequestRequestSpec contains the expiration time of the token.</p>
+<p>TokenRequestSpec contains the expiration time of the token.</p>
 </p>
 <table>
 <thead>

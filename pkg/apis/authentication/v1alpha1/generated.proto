@@ -66,14 +66,14 @@ message TokenRequest {
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
 
   // Spec is the specification of the TokenRequest.
-  optional TokenRequestRequestSpec spec = 2;
+  optional TokenRequestSpec spec = 2;
 
   // Status is the status of the TokenRequest.
   optional TokenRequestStatus status = 3;
 }
 
-// TokenRequestRequestSpec contains the expiration time of the token.
-message TokenRequestRequestSpec {
+// TokenRequestSpec contains the expiration time of the token.
+message TokenRequestSpec {
   // ExpirationSeconds is the requested validity duration of the credential. The
   // credential issuer may return a credential with a different validity duration so a
   // client needs to check the 'expirationTimestamp' field in a response.

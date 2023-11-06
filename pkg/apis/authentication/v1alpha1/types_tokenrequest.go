@@ -26,7 +26,7 @@ type TokenRequest struct {
 	// Standard object metadata.
 	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
 	// Spec is the specification of the TokenRequest.
-	Spec TokenRequestRequestSpec `json:"spec" protobuf:"bytes,2,opt,name=spec"`
+	Spec TokenRequestSpec `json:"spec" protobuf:"bytes,2,opt,name=spec"`
 	// Status is the status of the TokenRequest.
 	Status TokenRequestStatus `json:"status" protobuf:"bytes,3,opt,name=status"`
 }
@@ -40,8 +40,8 @@ type TokenRequestStatus struct {
 	ExpirationTimestamp metav1.Time `json:"expirationTimestamp" protobuf:"bytes,2,name=expirationTimestamp"`
 }
 
-// TokenRequestRequestSpec contains the expiration time of the token.
-type TokenRequestRequestSpec struct {
+// TokenRequestSpec contains the expiration time of the token.
+type TokenRequestSpec struct {
 	// ExpirationSeconds is the requested validity duration of the credential. The
 	// credential issuer may return a credential with a different validity duration so a
 	// client needs to check the 'expirationTimestamp' field in a response.

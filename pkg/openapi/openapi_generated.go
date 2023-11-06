@@ -37,7 +37,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/gardener/gardener/pkg/apis/authentication/v1alpha1.AdminKubeconfigRequestSpec":      schema_pkg_apis_authentication_v1alpha1_AdminKubeconfigRequestSpec(ref),
 		"github.com/gardener/gardener/pkg/apis/authentication/v1alpha1.AdminKubeconfigRequestStatus":    schema_pkg_apis_authentication_v1alpha1_AdminKubeconfigRequestStatus(ref),
 		"github.com/gardener/gardener/pkg/apis/authentication/v1alpha1.TokenRequest":                    schema_pkg_apis_authentication_v1alpha1_TokenRequest(ref),
-		"github.com/gardener/gardener/pkg/apis/authentication/v1alpha1.TokenRequestRequestSpec":         schema_pkg_apis_authentication_v1alpha1_TokenRequestRequestSpec(ref),
+		"github.com/gardener/gardener/pkg/apis/authentication/v1alpha1.TokenRequestSpec":                schema_pkg_apis_authentication_v1alpha1_TokenRequestSpec(ref),
 		"github.com/gardener/gardener/pkg/apis/authentication/v1alpha1.TokenRequestStatus":              schema_pkg_apis_authentication_v1alpha1_TokenRequestStatus(ref),
 		"github.com/gardener/gardener/pkg/apis/authentication/v1alpha1.WorkloadIdentity":                schema_pkg_apis_authentication_v1alpha1_WorkloadIdentity(ref),
 		"github.com/gardener/gardener/pkg/apis/authentication/v1alpha1.WorkloadIdentityList":            schema_pkg_apis_authentication_v1alpha1_WorkloadIdentityList(ref),
@@ -710,7 +710,7 @@ func schema_pkg_apis_authentication_v1alpha1_TokenRequest(ref common.ReferenceCa
 						SchemaProps: spec.SchemaProps{
 							Description: "Spec is the specification of the TokenRequest.",
 							Default:     map[string]interface{}{},
-							Ref:         ref("github.com/gardener/gardener/pkg/apis/authentication/v1alpha1.TokenRequestRequestSpec"),
+							Ref:         ref("github.com/gardener/gardener/pkg/apis/authentication/v1alpha1.TokenRequestSpec"),
 						},
 					},
 					"status": {
@@ -725,15 +725,15 @@ func schema_pkg_apis_authentication_v1alpha1_TokenRequest(ref common.ReferenceCa
 			},
 		},
 		Dependencies: []string{
-			"github.com/gardener/gardener/pkg/apis/authentication/v1alpha1.TokenRequestRequestSpec", "github.com/gardener/gardener/pkg/apis/authentication/v1alpha1.TokenRequestStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+			"github.com/gardener/gardener/pkg/apis/authentication/v1alpha1.TokenRequestSpec", "github.com/gardener/gardener/pkg/apis/authentication/v1alpha1.TokenRequestStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 	}
 }
 
-func schema_pkg_apis_authentication_v1alpha1_TokenRequestRequestSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_pkg_apis_authentication_v1alpha1_TokenRequestSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				Description: "TokenRequestRequestSpec contains the expiration time of the token.",
+				Description: "TokenRequestSpec contains the expiration time of the token.",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
 					"expirationSeconds": {

@@ -26,7 +26,7 @@ type TokenRequest struct {
 	// Standard object metadata.
 	metav1.ObjectMeta
 	// Spec is the specification of the TokenRequest.
-	Spec TokenRequestRequestSpec
+	Spec TokenRequestSpec
 	// Status is the status of the TokenRequest.
 	Status TokenRequestStatus
 }
@@ -40,8 +40,8 @@ type TokenRequestStatus struct {
 	ExpirationTimestamp metav1.Time
 }
 
-// TokenRequestRequestSpec contains the expiration time of the token.
-type TokenRequestRequestSpec struct {
+// TokenRequestSpec contains the expiration time of the token.
+type TokenRequestSpec struct {
 	// ExpirationSeconds is the requested validity duration of the credential. The
 	// credential issuer may return a credential with a different validity duration so a
 	// client needs to check the 'expirationTimestamp' field in a response.
