@@ -45,7 +45,7 @@ func (s *OpenIDMetadataServer) serveConfiguration(w http.ResponseWriter, r *http
 	w.Header().Set(headerContentType, mimeJSON)
 	w.Header().Set(headerCacheControl, cacheControl)
 	if _, err := w.Write(s.configJSON); err != nil {
-		s.logger.Error(err, "failed to write workload identity issuer metadata response")
+		s.logger.Error(err, "failed to write issuer metadata response")
 		return
 	}
 }
@@ -60,7 +60,7 @@ func (s *OpenIDMetadataServer) serveKeys(w http.ResponseWriter, r *http.Request)
 	w.Header().Set(headerContentType, mimeJWKS)
 	w.Header().Set(headerCacheControl, cacheControl)
 	if _, err := w.Write(s.keysetJSON); err != nil {
-		s.logger.Error(err, "failed to write workload identity issuer JWKS response")
+		s.logger.Error(err, "failed to write issuer JWKS response")
 		return
 	}
 }

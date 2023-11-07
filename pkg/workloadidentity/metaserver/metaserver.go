@@ -40,7 +40,7 @@ type OpenIDMetadataServerOptions struct {
 	Port int
 }
 
-// OpenIDMetadataServer is an HTTP server for metadata of the workload identity token issuer.
+// OpenIDMetadataServer is an HTTP server for metadata of the identity token issuer.
 type OpenIDMetadataServer struct {
 	configJSON []byte
 	keysetJSON []byte
@@ -50,7 +50,7 @@ type OpenIDMetadataServer struct {
 
 // NewOpenIDMetadataServer creates a new [OpenIDMetadataServer].
 // The hostname is the is the OIDC issuer's hostname, publicKeys are the keys
-// that may be used to sign workload identity tokens.
+// that may be used to sign identity tokens.
 func NewOpenIDMetadataServer(
 	issuerURL string,
 	publicKeys []interface{},
