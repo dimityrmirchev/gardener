@@ -20,6 +20,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"time"
 
 	"k8s.io/kubernetes/pkg/serviceaccount"
@@ -33,6 +34,8 @@ type Logger interface {
 
 // OpenIDMetadataServerOptions are options that can be applied to [OpenIDMetadataServer].
 type OpenIDMetadataServerOptions struct {
+	// Host is the host that the server will listen on.
+	Host string
 	// Port is the port that the server will listen on. Default is 443
 	Port int
 }
@@ -49,22 +52,27 @@ type OpenIDMetadataServer struct {
 // The hostname is the is the OIDC issuer's hostname, publicKeys are the keys
 // that may be used to sign workload identity tokens.
 func NewOpenIDMetadataServer(
-	hostname string,
+	issuerURL string,
 	publicKeys []interface{},
 	tlsConfig *tls.Config,
 	logger Logger,
 	opts OpenIDMetadataServerOptions,
 ) (*OpenIDMetadataServer, error) {
+	iss, err := url.Parse(issuerURL)
+	if err != nil {
+		return nil, err
+	}
+	if len(iss.Path) > 0 {
+		return nil, fmt.Errorf("issuer URL may not include path: %s", issuerURL)
+	}
+
 	port := 443
 	if opts.Port != 0 {
 		port = opts.Port
 	}
-	issuer := "https://" + hostname
-	if port != 443 {
-		issuer = fmt.Sprintf("%s:%v", issuer, port)
-	}
-	jwksURI := issuer + "/jwks"
-	meta, err := serviceaccount.NewOpenIDMetadata(issuer, jwksURI, "", publicKeys)
+
+	jwksURI := issuerURL + "/jwks"
+	meta, err := serviceaccount.NewOpenIDMetadata(issuerURL, jwksURI, "", publicKeys)
 	if err != nil {
 		return nil, err
 	}
@@ -85,7 +93,7 @@ func NewOpenIDMetadataServer(
 	mux.HandleFunc("/healthz", s.serveHealthz)
 
 	server := &http.Server{
-		Addr:         fmt.Sprintf(":%v", port),
+		Addr:         fmt.Sprintf("%s:%v", opts.Host, port),
 		Handler:      mux,
 		TLSConfig:    tlsConfig,
 		ReadTimeout:  5 * time.Second,
