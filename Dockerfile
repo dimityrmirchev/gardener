@@ -62,3 +62,9 @@ FROM distroless-static AS gardener-extension-provider-local
 COPY --from=builder /go/bin/gardener-extension-provider-local /gardener-extension-provider-local
 WORKDIR /
 ENTRYPOINT ["/gardener-extension-provider-local"]
+
+# gardener-openid-discovery
+FROM distroless-static AS gardener-openid-discovery
+COPY --from=builder /go/bin/gardener-openid-discovery /gardener-openid-discovery
+WORKDIR /
+ENTRYPOINT ["/gardener-openid-discovery"]

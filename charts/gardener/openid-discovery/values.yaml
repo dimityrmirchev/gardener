@@ -1,0 +1,45 @@
+replicaCount: 1
+revisionHistoryLimit: 2
+
+image:
+  repository: eu.gcr.io/gardener-project/gardener/openid-discovery
+  tag: latest
+  pullPolicy: IfNotPresent
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 100Mi
+
+logLevel: info
+logFormat: json
+
+server:
+  port: 11443
+  tls:
+    crt: |
+      -----BEGIN CERTIFICATE-----
+      ...
+      -----END CERTIFICATE-----
+    key: |
+      -----BEGIN PRIVATE KEY-----
+      ...
+      -----END PRIVATE KEY-----
+
+issuer: https://not.a.valid.issuer.cluster.local
+
+keyFiles:
+- name: key1
+  data: |
+    -----BEGIN PRIVATE KEY-----
+    ...
+    -----END PRIVATE KEY-----
+- name: key2
+  data: |
+    -----BEGIN PUBLIC KEY-----
+    ...
+    -----END PUBLIC KEY-----
+
+nodeToleration:
+  defaultNotReadyTolerationSeconds: 60
+  defaultUnreachableTolerationSeconds: 60

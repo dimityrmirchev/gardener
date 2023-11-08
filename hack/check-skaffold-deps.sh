@@ -35,6 +35,7 @@ check "skaffold.yaml" "gardener-extension-provider-local"  "provider-local"
 check "skaffold.yaml" "gardener-resource-manager"          "gardenlet"
 check "skaffold.yaml" "gardener-scheduler"                 "controlplane"
 check "skaffold.yaml" "gardenlet"                          "gardenlet"
+check "skaffold.yaml" "gardener-openid-discovery"          "openid-discovery"
 
 # skaffold-operator.yaml
 check "skaffold-operator.yaml" "gardener-operator"             "gardener-operator"

@@ -1,0 +1,95 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gardener-openid-discovery
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: gardener
+    role: openid-discovery
+spec:
+  revisionHistoryLimit: {{ required ".Values.revisionHistoryLimit is required" .Values.revisionHistoryLimit }}
+  replicas: {{ required ".Values.replicaCount is required" .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: gardener
+      role: openid-discovery
+  template:
+    metadata:
+      annotations:
+        checksum/secret-tls: {{ include (print $.Template.BasePath "/secret-tls.yaml") . | sha256sum }}
+        checksum/secret-keyfiles: {{ include (print $.Template.BasePath "/secret-keyfiles.yaml") . | sha256sum }}
+        {{- if .Values.podAnnotations }}
+{{ toYaml .Values.podAnnotations | indent 8 }}
+        {{- end }}
+      labels:
+        app: gardener
+        role: openid-discovery
+        # projected-token-mount.resources.gardener.cloud/skip: "true" #TODO CHECK THIS!
+        {{- if .Values.podLabels }}
+{{ toYaml .Values.podLabels | indent 8 }}
+        {{- end }}
+    spec:
+      priorityClassName: gardener-controlplane
+      serviceAccountName: gardener-openid-discovery
+      automountServiceAccountToken: false
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: gardener-openid-discovery
+        image: {{ include "image" .Values.image }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        args:
+        - --port={{ .Values.server.port }}
+        - --tls-cert-file=/etc/gardener-openid-discovery/tls/tls.crt
+        - --tls-key-file=/etc/gardener-openid-discovery/tls/tls.key
+        - --issuer={{ .Values.issuer }}
+        {{- range .Values.keyFiles }}
+        - --key-file=/etc/gardener-openid-discovery/keyfiles/{{ .name }}
+        {{- end }}
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: {{ required ".Values.server.port is required" .Values.server.port }}
+            scheme: HTTPS
+          initialDelaySeconds: 15
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: {{ required ".Values.server.port is required" .Values.server.port }}
+            scheme: HTTPS
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+        {{- if .Values.resources }}
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+        {{- end }}
+        volumeMounts:
+        - name: keyfiles
+          mountPath: /etc/gardener-openid-discovery/keyfiles
+        - name: tls
+          mountPath: /etc/gardener-openid-discovery/tls
+{{- if .Values.nodeToleration }}
+      tolerations:
+{{- if .Values.nodeToleration.defaultNotReadyTolerationSeconds }}
+      - effect: NoExecute
+        key: node.kubernetes.io/not-ready
+        operator: Exists
+        tolerationSeconds: {{ .Values.nodeToleration.defaultNotReadyTolerationSeconds }}
+{{- end }}
+{{- if .Values.nodeToleration.defaultUnreachableTolerationSeconds }}
+      - effect: NoExecute
+        key: node.kubernetes.io/unreachable
+        operator: Exists
+        tolerationSeconds: {{ .Values.nodeToleration.defaultUnreachableTolerationSeconds }}
+{{- end }}
+{{- end }}
+      volumes:
+      - name: keyfiles
+        secret:
+          secretName: gardener-openid-discovery-keyfiles
+      - name: tls
+        secret:
+          secretName: gardener-openid-discovery-tls

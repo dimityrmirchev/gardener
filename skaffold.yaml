@@ -65,6 +65,14 @@ build:
         - pkg/apiserver/admission/initializer
         - pkg/apiserver/features
         - pkg/apiserver/storage
+        - pkg/client/authentication/clientset/versioned
+        - pkg/client/authentication/clientset/versioned/scheme
+        - pkg/client/authentication/clientset/versioned/typed/authentication/v1alpha1
+        - pkg/client/authentication/informers/externalversions
+        - pkg/client/authentication/informers/externalversions/authentication
+        - pkg/client/authentication/informers/externalversions/authentication/v1alpha1
+        - pkg/client/authentication/informers/externalversions/internalinterfaces
+        - pkg/client/authentication/listers/authentication/v1alpha1
         - pkg/chartrenderer
         - pkg/client/core/clientset/internalversion
         - pkg/client/core/clientset/internalversion/scheme
@@ -108,7 +116,6 @@ build:
         - pkg/gardenlet/apis/config/validation
         - pkg/logger
         - pkg/openapi
-        - pkg/registry/authentication
         - pkg/registry/authentication/rest
         - pkg/registry/authentication/workloadidentity
         - pkg/registry/authentication/workloadidentity/storage
@@ -1205,3 +1212,39 @@ profiles:
       replicaCount: 1
       config.leaderElection.leaderElect: false
       config.server.healthProbes.enable: false
+---
+apiVersion: skaffold/v4beta7
+kind: Config
+metadata:
+  name: openid-discovery
+requires:
+- configs:
+  - etcd
+build:
+  artifacts:
+  - image: eu.gcr.io/gardener-project/gardener/openid-discovery
+    ko:
+      dependencies:
+        paths:
+        - cmd/gardener-openid-discovery/app
+        - pkg/logger
+        - pkg/workloadidentity/metaserver
+        - vendor
+        - VERSION
+      ldflags:
+      - '{{.LD_FLAGS}}'
+      main: ./cmd/gardener-openid-discovery
+deploy:
+  helm:
+    releases:
+    - name: gardener-openid-discovery
+      chartPath: charts/gardener/openid-discovery
+      valuesFiles:
+        - example/gardener-local/openid-discovery/values.yaml
+      namespace: garden
+      setValueTemplates:
+        image.repository: '{{.IMAGE_REPO_eu_gcr_io_gardener_project_gardener_openid_discovery}}'
+        image.tag: '{{.IMAGE_TAG_eu_gcr_io_gardener_project_gardener_openid_discovery}}@{{.IMAGE_DIGEST_eu_gcr_io_gardener_project_gardener_openid_discovery}}'
+      createNamespace: true
+      wait: true
+profiles: []

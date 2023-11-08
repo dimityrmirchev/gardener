@@ -1,0 +1,14 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: gardener-openid-discovery
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: gardener
+    role: openid-discovery
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: gardener
+      role: openid-discovery

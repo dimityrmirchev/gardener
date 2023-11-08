@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gardener-openid-discovery
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: gardener
+    role: openid-discovery
+spec:
+  selector:
+    app: gardener
+    role: openid-discovery
+  ports:
+  - name: server
+    port: 443
+    targetPort: {{ required ".Values.server.port is required" .Values.server.port }}
+    protocol: TCP

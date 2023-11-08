@@ -38,6 +38,11 @@ images:
   repository: eu.gcr.io/gardener-project/gardener/node-agent
   resourceId:
     name: node-agent
+- name: gardener-openid-discovery
+  sourceRepository: github.com/gardener/gardener
+  repository: eu.gcr.io/gardener-project/gardener/openid-discovery
+  resourceId:
+    name: openid-discovery
 
 # Seed bootstrap
 - name: pause-container

@@ -58,8 +58,6 @@ func NewCommand() *cobra.Command {
 
 			// don't output usage on further errors raised during execution
 			cmd.SilenceUsage = true
-			// further errors will be logged properly, don't duplicate
-			cmd.SilenceErrors = true
 
 			serverCert, err := tls.LoadX509KeyPair(opts.TLSCertFile, opts.TLSKeyFile)
 			if err != nil {
