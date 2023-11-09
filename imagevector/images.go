@@ -61,6 +61,8 @@ const (
 	ImageNameGardenerMetricsExporter = "gardener-metrics-exporter"
 	// ImageNameGardenerNodeAgent is a constant for an image in the image vector with name 'gardener-node-agent'.
 	ImageNameGardenerNodeAgent = "gardener-node-agent"
+	// ImageNameGardenerOpenidDiscovery is a constant for an image in the image vector with name 'gardener-openid-discovery'.
+	ImageNameGardenerOpenidDiscovery = "gardener-openid-discovery"
 	// ImageNameGardenerResourceManager is a constant for an image in the image vector with name 'gardener-resource-manager'.
 	ImageNameGardenerResourceManager = "gardener-resource-manager"
 	// ImageNameGardenerScheduler is a constant for an image in the image vector with name 'gardener-scheduler'.
