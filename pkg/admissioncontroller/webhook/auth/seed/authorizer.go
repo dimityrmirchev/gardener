@@ -32,6 +32,7 @@ import (
 
 	"github.com/gardener/gardener/pkg/admissioncontroller/seedidentity"
 	"github.com/gardener/gardener/pkg/admissioncontroller/webhook/auth/seed/graph"
+	authenticationv1alpha1 "github.com/gardener/gardener/pkg/apis/authentication/v1alpha1"
 	gardencorev1beta1 "github.com/gardener/gardener/pkg/apis/core/v1beta1"
 	v1beta1constants "github.com/gardener/gardener/pkg/apis/core/v1beta1/constants"
 	operationsv1alpha1 "github.com/gardener/gardener/pkg/apis/operations/v1alpha1"
@@ -83,6 +84,7 @@ var (
 	serviceAccountResource            = corev1.Resource("serviceaccounts")
 	shootResource                     = gardencorev1beta1.Resource("shoots")
 	shootStateResource                = gardencorev1beta1.Resource("shootstates")
+	workloadIdentityResource          = authenticationv1alpha1.Resource("workloadidentities")
 )
 
 // TODO: Revisit all `DecisionNoOpinion` later. Today we cannot deny the request for backwards compatibility
@@ -213,6 +215,12 @@ func (a *authorizer) Authorize(_ context.Context, attrs auth.Attributes) (auth.D
 				[]string{"get", "update", "patch", "delete", "list", "watch"},
 				[]string{"create"},
 				nil,
+			)
+		case workloadIdentityResource:
+			return a.authorize(requestLog, seedName, graph.VertexTypeWorkloadIdentity, attrs,
+				[]string{"get", "list", "watch", "create"},
+				nil,
+				[]string{"token"},
 			)
 		default:
 			a.logger.Info(

@@ -89,6 +89,7 @@ func (g *graph) handleShootCreateOrUpdate(shoot *gardencorev1beta1.Shoot) {
 	g.deleteAllIncomingEdges(VertexTypeSecret, VertexTypeShoot, shoot.Namespace, shoot.Name)
 	g.deleteAllIncomingEdges(VertexTypeSecretBinding, VertexTypeShoot, shoot.Namespace, shoot.Name)
 	g.deleteAllIncomingEdges(VertexTypeShootState, VertexTypeShoot, shoot.Namespace, shoot.Name)
+	g.deleteAllIncomingEdges(VertexTypeWorkloadIdentity, VertexTypeShoot, shoot.Namespace, shoot.Name)
 	g.deleteAllOutgoingEdges(VertexTypeShoot, shoot.Namespace, shoot.Name, VertexTypeSeed)
 
 	var (
@@ -148,6 +149,12 @@ func (g *graph) handleShootCreateOrUpdate(shoot *gardencorev1beta1.Shoot) {
 				g.addEdge(configMapVertex, shootVertex)
 			}
 		}
+	}
+
+	// TODO fix this!
+	if shoot.Labels != nil && shoot.Labels["workloadidentity"] != "" {
+		wiVertex := g.getOrCreateVertex(VertexTypeWorkloadIdentity, shoot.Namespace, shoot.Labels["workloadidentity"])
+		g.addEdge(wiVertex, shootVertex)
 	}
 
 	// Those secrets are not directly referenced in the shoot spec, however, they will be created/updated as part of the

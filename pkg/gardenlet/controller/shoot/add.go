@@ -33,6 +33,7 @@ import (
 	"github.com/gardener/gardener/pkg/gardenlet/controller/shoot/care"
 	"github.com/gardener/gardener/pkg/gardenlet/controller/shoot/shoot"
 	"github.com/gardener/gardener/pkg/gardenlet/controller/shoot/state"
+	"github.com/gardener/gardener/pkg/gardenlet/controller/shoot/workloadidentity"
 )
 
 // AddToManager adds all Shoot controllers to the given manager.
@@ -90,6 +91,12 @@ func AddToManager(
 		}).AddToManager(mgr, gardenCluster, seedCluster); err != nil {
 			return fmt.Errorf("failed adding state reconciler: %w", err)
 		}
+	}
+
+	if err := (&workloadidentity.Reconciler{
+		SeedName: cfg.SeedConfig.Name,
+	}).AddToManager(mgr, gardenCluster, seedCluster); err != nil {
+		return fmt.Errorf("failed adding workload identity reconciler: %w", err)
 	}
 
 	return nil

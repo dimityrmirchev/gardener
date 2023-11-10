@@ -52,6 +52,7 @@ import (
 	"github.com/gardener/gardener/cmd/gardenlet/app/bootstrappers"
 	cmdutils "github.com/gardener/gardener/cmd/utils"
 	"github.com/gardener/gardener/pkg/api/indexer"
+	authenticationv1alpha1 "github.com/gardener/gardener/pkg/apis/authentication/v1alpha1"
 	gardencore "github.com/gardener/gardener/pkg/apis/core"
 	gardencorev1beta1 "github.com/gardener/gardener/pkg/apis/core/v1beta1"
 	v1beta1constants "github.com/gardener/gardener/pkg/apis/core/v1beta1/constants"
@@ -291,6 +292,7 @@ func (g *garden) Start(ctx context.Context) error {
 					&gardencorev1beta1.Project{}:                kubernetes.SingleObjectCacheFunc(log, kubernetes.GardenScheme, &gardencorev1beta1.Project{}),
 					&gardencorev1beta1.SecretBinding{}:          kubernetes.SingleObjectCacheFunc(log, kubernetes.GardenScheme, &gardencorev1beta1.SecretBinding{}),
 					&gardencorev1beta1.ShootState{}:             kubernetes.SingleObjectCacheFunc(log, kubernetes.GardenScheme, &gardencorev1beta1.ShootState{}),
+					&authenticationv1alpha1.WorkloadIdentity{}:  kubernetes.SingleObjectCacheFunc(log, kubernetes.GardenScheme, &authenticationv1alpha1.WorkloadIdentity{}),
 				},
 				kubernetes.GardenScheme,
 			)(config, opts)

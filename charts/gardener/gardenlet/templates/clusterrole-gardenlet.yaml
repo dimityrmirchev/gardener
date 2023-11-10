@@ -20,6 +20,20 @@ rules:
   - get
   - list
   - watch
+- apiGroups:
+  - authentication.gardener.cloud
+  resources:
+  - workloadidentities
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - authentication.gardener.cloud
+  resources:
+  - workloadidentities/token
+  verbs:
+  - create
 - apiGroups: # TODO (istvanballok,rickardsjp): remove in release v1.77. Patching persistent volumes is needed for the Loki -> Vali migration.
   - ""
   resources:

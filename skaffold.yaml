@@ -227,6 +227,9 @@ build:
         - cmd/utils
         - pkg/api/extensions
         - pkg/api/indexer
+        - pkg/apis/authentication
+        - pkg/apis/authentication/install
+        - pkg/apis/authentication/v1alpha1
         - pkg/apis/core
         - pkg/apis/core/install
         - pkg/apis/core/v1beta1
@@ -332,6 +335,9 @@ build:
         - cmd/gardener-scheduler/app
         - cmd/utils
         - pkg/api/extensions
+        - pkg/apis/authentication
+        - pkg/apis/authentication/install
+        - pkg/apis/authentication/v1alpha1
         - pkg/apis/core
         - pkg/apis/core/install
         - pkg/apis/core/v1beta1
@@ -412,6 +418,9 @@ build:
         - pkg/admissioncontroller/webhook/admission/seedrestriction
         - pkg/admissioncontroller/webhook/auth/seed
         - pkg/admissioncontroller/webhook/auth/seed/graph
+        - pkg/apis/authentication
+        - pkg/apis/authentication/install
+        - pkg/apis/authentication/v1alpha1
         - pkg/apis/core
         - pkg/apis/core/helper
         - pkg/apis/core/install
@@ -558,6 +567,9 @@ build:
         - cmd/gardener-extension-provider-local/app
         - cmd/utils
         - extensions/pkg/apis/config
+        - pkg/apis/authentication
+        - pkg/apis/authentication/install
+        - pkg/apis/authentication/v1alpha1
         - extensions/pkg/controller
         - extensions/pkg/controller/backupbucket
         - extensions/pkg/controller/backupentry
@@ -791,6 +803,9 @@ build:
         - imagevector
         - pkg/api/extensions
         - pkg/api/indexer
+        - pkg/apis/authentication
+        - pkg/apis/authentication/install
+        - pkg/apis/authentication/v1alpha1
         - pkg/apis/core
         - pkg/apis/core/helper
         - pkg/apis/core/install
@@ -819,6 +834,8 @@ build:
         - pkg/apis/settings/install
         - pkg/apis/settings/v1alpha1
         - pkg/chartrenderer
+        - pkg/client/authentication/clientset/versioned/scheme
+        - pkg/client/authentication/clientset/versioned/typed/authentication/v1alpha1
         - pkg/client/kubernetes
         - pkg/client/kubernetes/cache
         - pkg/client/kubernetes/clientmap
@@ -863,6 +880,7 @@ build:
         - pkg/gardenlet/controller/shoot/shoot
         - pkg/gardenlet/controller/shoot/shoot/helper
         - pkg/gardenlet/controller/shoot/state
+        - pkg/gardenlet/controller/shoot/workloadidentity
         - pkg/gardenlet/features
         - pkg/healthz
         - pkg/logger
@@ -1014,6 +1032,9 @@ build:
         - cmd/utils
         - pkg/api/extensions
         - pkg/api/indexer
+        - pkg/apis/authentication
+        - pkg/apis/authentication/install
+        - pkg/apis/authentication/v1alpha1
         - pkg/apis/core
         - pkg/apis/core/install
         - pkg/apis/core/v1beta1
