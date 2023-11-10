@@ -19,6 +19,7 @@ import (
 )
 
 // +genclient
+// +genclient:method=CreateToken,verb=create,subresource=token,input=github.com/gardener/gardener/pkg/apis/authentication/v1alpha1.TokenRequest,result=github.com/gardener/gardener/pkg/apis/authentication/v1alpha1.TokenRequest
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // WorkloadIdentity holds certain properties related to Gardener managed workload communicating with external systems.
