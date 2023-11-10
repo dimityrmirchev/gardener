@@ -41,6 +41,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/cache"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
+	authenticationinstall "github.com/gardener/gardener/pkg/apis/authentication/install"
 	gardencoreinstall "github.com/gardener/gardener/pkg/apis/core/install"
 	extensionsv1alpha1 "github.com/gardener/gardener/pkg/apis/extensions/v1alpha1"
 	operationsinstall "github.com/gardener/gardener/pkg/apis/operations/install"
@@ -96,6 +97,7 @@ func DefaultUpdateOptions() metav1.UpdateOptions { return metav1.UpdateOptions{}
 var (
 	gardenSchemeBuilder = runtime.NewSchemeBuilder(
 		kubernetesscheme.AddToScheme,
+		authenticationinstall.AddToScheme,
 		gardencoreinstall.AddToScheme,
 		seedmanagementinstall.AddToScheme,
 		settingsinstall.AddToScheme,
