@@ -16,9 +16,11 @@ package tokenrequestor
 
 import (
 	"fmt"
+	"time"
 
 	corev1 "k8s.io/api/core/v1"
 	corev1clientset "k8s.io/client-go/kubernetes/typed/core/v1"
+	"k8s.io/client-go/util/workqueue"
 	"sigs.k8s.io/controller-runtime/pkg/builder"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/cluster"
@@ -55,6 +57,7 @@ func (r *Reconciler) AddToManager(mgr manager.Manager, sourceCluster, targetClus
 		For(&corev1.Secret{}, builder.WithPredicates(r.SecretPredicate())).
 		WithOptions(controller.Options{
 			MaxConcurrentReconciles: r.ConcurrentSyncs,
+			RateLimiter:             workqueue.NewItemExponentialFailureRateLimiter(time.Second, time.Minute),
 		}).
 		Complete(r)
 }
