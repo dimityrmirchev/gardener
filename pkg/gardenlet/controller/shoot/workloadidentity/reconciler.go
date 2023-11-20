@@ -88,7 +88,6 @@ func (r *Reconciler) Reconcile(reconcileCtx context.Context, req reconcile.Reque
 		return reconcile.Result{}, fmt.Errorf("error requesting token: %w", err)
 	}
 
-	// TODO also use the uuid of a workload identity
 	secret := &corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "wi--" + wi.Name,
@@ -97,8 +96,18 @@ func (r *Reconciler) Reconcile(reconcileCtx context.Context, req reconcile.Reque
 	}
 
 	_, err = controllerutil.CreateOrUpdate(ctx, r.SeedClient, secret, func() error {
+		secret.Annotations = map[string]string{
+			"workloadidentity.authentication.gardener.cloud/name":       wi.Name,
+			"workloadidentity.authentication.gardener.cloud/namespace":  wi.Namespace,
+			"workloadidentity.authentication.gardener.cloud/uid":        string(wi.UID),
+			"workloadidentity.authentication.gardener.cloud/renewed-at": time.Now().UTC().Format(time.RFC3339),
+		}
+		secret.Labels = map[string]string{
+			"authentication.gardener.cloud/purpose": "workloadidentity",
+		}
 		secret.Data = map[string][]byte{
 			"token": []byte(tokResp.Status.Token),
+			// TODO add extra config to data
 		}
 		return nil
 	})
