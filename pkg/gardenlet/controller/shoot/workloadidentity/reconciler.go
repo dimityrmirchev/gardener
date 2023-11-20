@@ -34,12 +34,17 @@ import (
 	"github.com/gardener/gardener/pkg/controllerutils"
 )
 
+const (
+	defaultValidityDuration = 12 * time.Hour
+)
+
 // Reconciler requests and refreshes tokens via the Workload Identity TokenRequest API.
 type Reconciler struct {
 	GardenClient        client.Client
 	SeedClient          client.Client
 	GardenAuthClientset *authenticationv1alpha1clientset.AuthenticationV1alpha1Client
 	Clock               clock.Clock
+	JitterFunc          func(duration time.Duration, maxFactor float64) time.Duration
 	SeedName            string
 }
 
@@ -81,27 +86,33 @@ func (r *Reconciler) Reconcile(reconcileCtx context.Context, req reconcile.Reque
 		return reconcile.Result{}, nil
 	}
 
+	expirationSeconds := int64(defaultValidityDuration / time.Second)
 	tokResp, err := r.GardenAuthClientset.WorkloadIdentities(wi.Namespace).CreateToken(ctx, wi.Name, &authenticationv1alpha1.TokenRequest{
-		Spec: authenticationv1alpha1.TokenRequestSpec{},
+		Spec: authenticationv1alpha1.TokenRequestSpec{
+			ExpirationSeconds: &expirationSeconds,
+		},
 	}, metav1.CreateOptions{})
 	if err != nil {
 		return reconcile.Result{}, fmt.Errorf("error requesting token: %w", err)
 	}
 
+	renewDuration := r.renewDuration(tokResp.Status.ExpirationTimestamp.Time)
 	secret := &corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "wi--" + wi.Name,
 			Namespace: shoot.Status.TechnicalID,
 		},
 	}
-
+	now := r.Clock.Now().UTC()
 	_, err = controllerutil.CreateOrUpdate(ctx, r.SeedClient, secret, func() error {
 		secret.Annotations = map[string]string{
-			"workloadidentity.authentication.gardener.cloud/name":       wi.Name,
-			"workloadidentity.authentication.gardener.cloud/namespace":  wi.Namespace,
-			"workloadidentity.authentication.gardener.cloud/uid":        string(wi.UID),
-			"workloadidentity.authentication.gardener.cloud/renewed-at": time.Now().UTC().Format(time.RFC3339),
+			"workloadidentity.authentication.gardener.cloud/name":                  wi.Name,
+			"workloadidentity.authentication.gardener.cloud/namespace":             wi.Namespace,
+			"workloadidentity.authentication.gardener.cloud/uid":                   string(wi.UID),
+			"workloadidentity.authentication.gardener.cloud/renewed-at":            now.Format(time.RFC3339),
+			"workloadidentity.authentication.gardener.cloud/token-renew-timestamp": now.Add(renewDuration).Format(time.RFC3339),
 		}
+
 		secret.Labels = map[string]string{
 			"authentication.gardener.cloud/purpose": "workloadidentity",
 		}
@@ -115,5 +126,11 @@ func (r *Reconciler) Reconcile(reconcileCtx context.Context, req reconcile.Reque
 		return reconcile.Result{}, fmt.Errorf("error writing workload identity token secret: %w", err)
 	}
 
-	return reconcile.Result{RequeueAfter: time.Second * 600}, nil
+	log.Info("Successfully requested workload identity token and scheduled renewal", "after", renewDuration)
+	return reconcile.Result{Requeue: true, RequeueAfter: renewDuration}, nil
+}
+
+func (r *Reconciler) renewDuration(expirationTimestamp time.Time) time.Duration {
+	validityDuration := expirationTimestamp.UTC().Sub(r.Clock.Now().UTC())
+	return r.JitterFunc(validityDuration*70/100, 0.05)
 }

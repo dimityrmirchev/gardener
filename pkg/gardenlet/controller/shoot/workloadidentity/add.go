@@ -17,6 +17,7 @@ package workloadidentity
 import (
 	"fmt"
 
+	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/utils/clock"
 	"sigs.k8s.io/controller-runtime/pkg/builder"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -56,6 +57,10 @@ func (r *Reconciler) AddToManager(mgr manager.Manager, gardenCluster, seedCluste
 
 	if r.Clock == nil {
 		r.Clock = clock.RealClock{}
+	}
+
+	if r.JitterFunc == nil {
+		r.JitterFunc = wait.Jitter
 	}
 
 	return builder.
