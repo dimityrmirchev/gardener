@@ -122,9 +122,9 @@ func (r *TokenRequestREST) Create(ctx context.Context, name string, obj runtime.
 		}
 	}
 
-	var oneHourSec int64 = 3600
-	if req.Spec.ExpirationSeconds > oneHourSec { // one hour
-		req.Spec.ExpirationSeconds = oneHourSec
+	var oneDay int64 = 3600 * 24
+	if req.Spec.ExpirationSeconds > oneDay {
+		req.Spec.ExpirationSeconds = oneDay
 	}
 
 	public, private := claims(*wi, req.Spec.ExpirationSeconds)
