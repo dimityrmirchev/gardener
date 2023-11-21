@@ -68,8 +68,6 @@ func (r *Reconciler) Reconcile(reconcileCtx context.Context, req reconcile.Reque
 		return reconcile.Result{}, nil
 	}
 
-	log.Info("Requesting new token")
-
 	wi := &authenticationv1alpha1.WorkloadIdentity{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      shoot.Labels["workloadidentity"], // TODO fix this
@@ -77,16 +75,38 @@ func (r *Reconciler) Reconcile(reconcileCtx context.Context, req reconcile.Reque
 		},
 	}
 
-	wiKey := client.ObjectKeyFromObject(wi)
-	if err := r.GardenClient.Get(ctx, wiKey, wi); err != nil {
+	if err := r.GardenClient.Get(ctx, client.ObjectKeyFromObject(wi), wi); err != nil {
 		if apierrors.IsNotFound(err) {
-			log.Info("Object is gone, stop reconciling", "workloadIdentity", wiKey.String())
-			return reconcile.Result{}, err
+			log.Info("Object is gone, stop reconciling", "workloadIdentity", client.ObjectKeyFromObject(wi).String())
+			return reconcile.Result{}, nil
 		}
-		return reconcile.Result{}, nil
+		return reconcile.Result{}, err
 	}
 
-	// TODO
+	secret := &corev1.Secret{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      "wi--" + wi.Name,
+			Namespace: shoot.Status.TechnicalID,
+		},
+	}
+
+	if err := r.SeedClient.Get(ctx, client.ObjectKeyFromObject(secret), secret); err != nil {
+		// if the secret does not exist we will create it later
+		if !apierrors.IsNotFound(err) {
+			return reconcile.Result{}, err
+		}
+	}
+
+	mustRequeue, requeueAfter, err := r.requeue(ctx, secret)
+	if err != nil {
+		return reconcile.Result{}, err
+	}
+	if mustRequeue {
+		log.Info("No need to generate new token, renewal is scheduled", "after", requeueAfter)
+		return reconcile.Result{Requeue: true, RequeueAfter: requeueAfter}, nil
+	}
+
+	log.Info("Requesting new token")
 
 	expirationSeconds := int64(defaultValidityDuration / time.Second)
 	tokResp, err := r.GardenAuthClientset.WorkloadIdentities(wi.Namespace).CreateToken(ctx, wi.Name, &authenticationv1alpha1.TokenRequest{
@@ -99,12 +119,6 @@ func (r *Reconciler) Reconcile(reconcileCtx context.Context, req reconcile.Reque
 	}
 
 	renewDuration := r.renewDuration(tokResp.Status.ExpirationTimestamp.Time)
-	secret := &corev1.Secret{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      "wi--" + wi.Name,
-			Namespace: shoot.Status.TechnicalID,
-		},
-	}
 	now := r.Clock.Now().UTC()
 	_, err = controllerutil.CreateOrUpdate(ctx, r.SeedClient, secret, func() error {
 		secret.Annotations = map[string]string{
@@ -134,5 +148,30 @@ func (r *Reconciler) Reconcile(reconcileCtx context.Context, req reconcile.Reque
 
 func (r *Reconciler) renewDuration(expirationTimestamp time.Time) time.Duration {
 	validityDuration := expirationTimestamp.UTC().Sub(r.Clock.Now().UTC())
-	return r.JitterFunc(validityDuration*70/100, 0.05)
+	// renew tokens after roughly half of the time has passed
+	return r.JitterFunc(validityDuration*50/100, 0.10)
+}
+
+func (r *Reconciler) requeue(ctx context.Context, secret *corev1.Secret) (bool, time.Duration, error) {
+	if _, tokenExists := secret.Data["token"]; !tokenExists {
+		return false, 0, nil
+	}
+
+	// TODO Should we check this annotation or instead parse the token
+	// and its exp claim?
+	renewTimestamp := secret.Annotations["workloadidentity.authentication.gardener.cloud/token-renew-timestamp"]
+	if len(renewTimestamp) == 0 {
+		return false, 0, nil
+	}
+
+	renewTime, err := time.Parse(time.RFC3339, renewTimestamp)
+	if err != nil {
+		return false, 0, fmt.Errorf("could not parse renew timestamp: %w", err)
+	}
+
+	if r.Clock.Now().UTC().Before(renewTime.UTC()) {
+		return true, renewTime.UTC().Sub(r.Clock.Now().UTC()), nil
+	}
+
+	return false, 0, nil
 }
