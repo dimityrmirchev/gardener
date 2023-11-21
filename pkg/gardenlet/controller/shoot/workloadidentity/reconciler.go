@@ -86,6 +86,8 @@ func (r *Reconciler) Reconcile(reconcileCtx context.Context, req reconcile.Reque
 		return reconcile.Result{}, nil
 	}
 
+	// TODO
+
 	expirationSeconds := int64(defaultValidityDuration / time.Second)
 	tokResp, err := r.GardenAuthClientset.WorkloadIdentities(wi.Namespace).CreateToken(ctx, wi.Name, &authenticationv1alpha1.TokenRequest{
 		Spec: authenticationv1alpha1.TokenRequestSpec{

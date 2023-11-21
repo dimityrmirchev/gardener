@@ -15,9 +15,14 @@
 package workloadidentity
 
 import (
+	"context"
 	"fmt"
+	"time"
 
+	apiequality "k8s.io/apimachinery/pkg/api/equality"
+	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/wait"
+	"k8s.io/client-go/util/workqueue"
 	"k8s.io/utils/clock"
 	"sigs.k8s.io/controller-runtime/pkg/builder"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -27,6 +32,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/handler"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	"sigs.k8s.io/controller-runtime/pkg/predicate"
+	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 	"sigs.k8s.io/controller-runtime/pkg/source"
 
 	gardencorev1beta1 "github.com/gardener/gardener/pkg/apis/core/v1beta1"
@@ -66,10 +72,14 @@ func (r *Reconciler) AddToManager(mgr manager.Manager, gardenCluster, seedCluste
 	return builder.
 		ControllerManagedBy(mgr).
 		Named(ControllerName).
-		WithOptions(controller.Options{MaxConcurrentReconciles: 20}). // TODO make this configurable
+		WithOptions(controller.Options{
+			// TODO make this configurable
+			MaxConcurrentReconciles: 20,
+			RateLimiter:             workqueue.NewWithMaxWaitRateLimiter(workqueue.DefaultControllerRateLimiter(), time.Minute),
+		}).
 		WatchesRawSource(
 			source.Kind(gardenCluster.GetCache(), &gardencorev1beta1.Shoot{}),
-			&handler.EnqueueRequestForObject{},
+			eventHandler(),
 			builder.WithPredicates(
 				predicateutils.SeedNamePredicate(r.SeedName, gardenerutils.GetShootSeedNames),
 				predicate.Funcs{
@@ -93,4 +103,54 @@ func isRelevantShoot(obj client.Object) bool {
 
 func isRelevantShootUpdate(old, new client.Object) bool {
 	return isRelevantShoot(old) || isRelevantShoot(new)
+}
+
+// eventHandler returns an event handler.
+func eventHandler() handler.EventHandler {
+	return &handler.Funcs{
+		CreateFunc: func(_ context.Context, e event.CreateEvent, q workqueue.RateLimitingInterface) {
+			_, ok := e.Object.(*gardencorev1beta1.Shoot)
+			if !ok {
+				return
+			}
+
+			q.Add(reconcile.Request{NamespacedName: types.NamespacedName{
+				Name:      e.Object.GetName(),
+				Namespace: e.Object.GetNamespace(),
+			}})
+		},
+		UpdateFunc: func(_ context.Context, e event.UpdateEvent, q workqueue.RateLimitingInterface) {
+			new, ok := e.ObjectNew.(*gardencorev1beta1.Shoot)
+			if !ok {
+				return
+			}
+
+			old, ok := e.ObjectOld.(*gardencorev1beta1.Shoot)
+			if !ok {
+				return
+			}
+
+			// TODO maybe revisit this
+			// for now lets requeue if the spec changes
+			if apiequality.Semantic.DeepEqual(old.Spec, new.Spec) {
+				return
+			}
+
+			q.Add(reconcile.Request{NamespacedName: types.NamespacedName{
+				Name:      e.ObjectNew.GetName(),
+				Namespace: e.ObjectNew.GetNamespace(),
+			}})
+		},
+		DeleteFunc: func(_ context.Context, e event.DeleteEvent, q workqueue.RateLimitingInterface) {
+			_, ok := e.Object.(*gardencorev1beta1.Shoot)
+			if !ok {
+				return
+			}
+
+			q.Add(reconcile.Request{NamespacedName: types.NamespacedName{
+				Name:      e.Object.GetName(),
+				Namespace: e.Object.GetNamespace(),
+			}})
+		},
+	}
 }
