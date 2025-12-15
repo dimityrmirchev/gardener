@@ -208,6 +208,11 @@ func (g *gardenSystem) computeResourcesData() (map[string][]byte, error) {
 					Resources: []string{"certificatesigningrequests"},
 					Verbs:     []string{"create", "delete", "deletecollection", "get", "list", "watch", "patch", "update", "approve", "deny"},
 				},
+				{
+					APIGroups: []string{v1beta1constants.GardenerVirtualRBACGroup},
+					Resources: []string{"gardener/admin"},
+					Verbs:     []string{"is"},
+				},
 			},
 		}
 		clusterRoleBindingGardenerAdmin = &rbacv1.ClusterRoleBinding{
@@ -308,6 +313,11 @@ func (g *gardenSystem) computeResourcesData() (map[string][]byte, error) {
 					APIGroups: []string{coordinationv1.GroupName},
 					Resources: []string{"leases"},
 					Verbs:     []string{"get", "list", "watch"},
+				},
+				{
+					APIGroups: []string{v1beta1constants.GardenerVirtualRBACGroup},
+					Resources: []string{"gardener/viewer"},
+					Verbs:     []string{"is"},
 				},
 			},
 		}

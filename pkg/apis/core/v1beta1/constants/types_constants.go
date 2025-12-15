@@ -854,6 +854,10 @@ const (
 	// Instead, they are assigned to the group "gardener.cloud:system:viewers".
 	ShootProjectViewersGroupName = "gardener.cloud:project:viewers"
 
+	// GardenerVirtualRBACGroup is a virtual group identifier used for authorization purposes in Gardener.
+	// This is not an actual Kubernetes group, but rather a marker used internally for RBAC policy decisions.
+	GardenerVirtualRBACGroup = "virtualrbac.gardener.cloud"
+
 	// ProjectName is the key of a label on namespaces whose value holds the project name.
 	ProjectName = "project.gardener.cloud/name"
 	// ProjectSkipStaleCheck is the key of an annotation on a project namespace that marks the associated Project to be

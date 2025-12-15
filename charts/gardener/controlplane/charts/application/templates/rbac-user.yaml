@@ -57,6 +57,12 @@ rules:
   - patch
   - update
 - apiGroups:
+  - virtualrbac.gardener.cloud
+  resources:
+  - gardener/admin
+  verbs:
+  - is
+- apiGroups:
   - ""
   resources:
   - events
@@ -236,6 +242,12 @@ rules:
   - get
   - list
   - watch
+- apiGroups:
+  - virtualrbac.gardener.cloud
+  resources:
+  - gardener/viewer
+  verbs:
+  - is
 - apiGroups:
   - ""
   resources:

@@ -55,9 +55,9 @@ func getAdminUserGroups(ctx context.Context, u user.Info, subjectAccessReviewer 
 		Spec: authorizationv1.SubjectAccessReviewSpec{
 			ResourceAttributes: &authorizationv1.ResourceAttributes{
 				Namespace: "",
-				Group:     "v1",
-				Resource:  "Secret",
-				Verb:      "list",
+				Group:     v1beta1constants.GardenerVirtualRBACGroup,
+				Resource:  "gardener/admin",
+				Verb:      "is",
 			},
 			User:   u.GetName(),
 			Groups: u.GetGroups(),

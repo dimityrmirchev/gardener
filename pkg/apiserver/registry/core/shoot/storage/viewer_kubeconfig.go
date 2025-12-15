@@ -55,9 +55,9 @@ func getViewerUserGroups(ctx context.Context, u user.Info, subjectAccessReviewer
 		Spec: authorizationv1.SubjectAccessReviewSpec{
 			ResourceAttributes: &authorizationv1.ResourceAttributes{
 				Namespace: "",
-				Group:     "core.gardener.cloud/v1beta1",
-				Resource:  "Project",
-				Verb:      "list",
+				Group:     v1beta1constants.GardenerVirtualRBACGroup,
+				Resource:  "gardener/viewer",
+				Verb:      "is",
 			},
 			User:   u.GetName(),
 			Groups: u.GetGroups(),

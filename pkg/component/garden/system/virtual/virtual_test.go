@@ -229,6 +229,11 @@ var _ = Describe("Virtual", func() {
 					Resources: []string{"certificatesigningrequests"},
 					Verbs:     []string{"create", "delete", "deletecollection", "get", "list", "watch", "patch", "update", "approve", "deny"},
 				},
+				{
+					APIGroups: []string{"virtualrbac.gardener.cloud"},
+					Resources: []string{"gardener/admin"},
+					Verbs:     []string{"is"},
+				},
 			},
 		}
 		clusterRoleBindingGardenerAdmin = &rbacv1.ClusterRoleBinding{
@@ -329,6 +334,11 @@ var _ = Describe("Virtual", func() {
 					APIGroups: []string{"coordination.k8s.io"},
 					Resources: []string{"leases"},
 					Verbs:     []string{"get", "list", "watch"},
+				},
+				{
+					APIGroups: []string{"virtualrbac.gardener.cloud"},
+					Resources: []string{"gardener/viewer"},
+					Verbs:     []string{"is"},
 				},
 			},
 		}
