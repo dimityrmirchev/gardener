@@ -16,10 +16,16 @@
     - gardener-apiserver.relay.svc.cluster.local
 {{- end }}
     extraArgs:
+      authentication-config: /etc/gardener-local/kube-apiserver/structured-authentication.yaml
       authorization-config: /etc/gardener-local/kube-apiserver/authz-config.yaml
       feature-gates: "MutatingAdmissionPolicy=true"
       runtime-config: "admissionregistration.k8s.io/v1alpha1=true,admissionregistration.k8s.io/v1beta1=true"
     extraVolumes:
+    - name: structured-authentication
+      mountPath: /etc/gardener-local/kube-apiserver/structured-authentication.yaml
+      hostPath: /etc/gardener-local/kube-apiserver/structured-authentication.yaml
+      readOnly: true
+      pathType: File
     - name: authz-config
       mountPath: /etc/gardener-local/kube-apiserver/authz-config.yaml
       readOnly: true

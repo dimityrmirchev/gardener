@@ -387,6 +387,14 @@ if [[ "$IPFAMILY" == "ipv6" ]] && [[ "$MULTI_ZONAL" == "true" ]]; then
   ADDITIONAL_ARGS="$ADDITIONAL_ARGS --set gardener.seed.istio.listenAddresses={fd00:ff::1,fd00:ff::10,fd00:ff::11,fd00:ff::12}"
 fi
 
+./hack/generate-certs.sh \
+  "./dev/garden/discovery-server" \
+  "discovery.local.gardener.cloud" \
+  "DNS:localhost,DNS:discovery.local.gardener.cloud,IP:127.0.0.1"
+
+cp "./example/gardener-local/kube-apiserver/structured-authentication.template.yaml" "./example/gardener-local/kube-apiserver/structured-authentication.yaml"
+yq -i ' .jwt[0].issuer.certificateAuthority = load_str("'"./dev/garden/discovery-server/certs/ca.crt"'") ' "./example/gardener-local/kube-apiserver/structured-authentication.yaml"
+
 kind create cluster \
   --name "$CLUSTER_NAME" \
   --config <(helm template $CHART --values "$PATH_CLUSTER_VALUES" $ADDITIONAL_ARGS --set "gardener.repositoryRoot"=$(dirname "$0")/..)

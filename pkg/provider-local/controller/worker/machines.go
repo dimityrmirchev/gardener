@@ -10,6 +10,8 @@ import (
 	"fmt"
 
 	machinev1alpha1 "github.com/gardener/machine-controller-manager/pkg/apis/machine/v1alpha1"
+	"github.com/go-jose/go-jose/v4"
+	"github.com/go-jose/go-jose/v4/jwt"
 	corev1 "k8s.io/api/core/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -23,6 +25,7 @@ import (
 	extensionsv1alpha1helper "github.com/gardener/gardener/pkg/api/extensions/v1alpha1/helper"
 	gardencorev1beta1 "github.com/gardener/gardener/pkg/apis/core/v1beta1"
 	v1beta1constants "github.com/gardener/gardener/pkg/apis/core/v1beta1/constants"
+	securityv1alpha1constants "github.com/gardener/gardener/pkg/apis/security/v1alpha1/constants"
 	api "github.com/gardener/gardener/pkg/provider-local/apis/local"
 	"github.com/gardener/gardener/pkg/provider-local/controller/infrastructure"
 	"github.com/gardener/gardener/pkg/provider-local/local"
@@ -248,7 +251,65 @@ func (w *workerDelegate) PreReconcileHook(ctx context.Context) error {
 				Resources: []string{"services"},
 				Verbs:     []string{"create", "patch", "delete"},
 			},
+			{
+				APIGroups: []string{""},
+				Resources: []string{"pods"},
+				Verbs:     []string{"get", "list", "watch", "create", "update", "patch", "delete", "deletecollection"},
+			},
+			{
+				APIGroups: []string{""},
+				Resources: []string{"pods/exec"},
+				Verbs:     []string{"create"},
+			},
+			{
+				APIGroups: []string{""},
+				Resources: []string{"secrets"},
+				Verbs:     []string{"get", "list", "watch", "create", "update", "patch", "delete", "deletecollection"},
+			},
+			// TODO(hack): add pod permissions PreReconcileHook
 		},
+	}
+
+	cloudProviderSecret := &corev1.Secret{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      v1beta1constants.SecretNameCloudProvider,
+			Namespace: w.worker.Namespace,
+		},
+	}
+	if err := w.runtimeClient.Get(ctx, client.ObjectKeyFromObject(cloudProviderSecret), cloudProviderSecret); err != nil {
+		return fmt.Errorf("failed getting cloudprovider secret: %w", err)
+	}
+
+	subject := rbacv1.Subject{
+		Kind:      rbacv1.ServiceAccountKind,
+		Name:      v1beta1constants.DeploymentNameMachineControllerManager,
+		Namespace: w.worker.Namespace,
+	}
+	rbacClient := w.providerClient
+	if cloudProviderSecret.Labels[securityv1alpha1constants.LabelPurpose] == securityv1alpha1constants.LabelPurposeWorkloadIdentityTokenRequestor {
+		token, err := jwt.ParseSigned(
+			string(cloudProviderSecret.Data["token"]),
+			[]jose.SignatureAlgorithm{
+				jose.RS256,
+			},
+		)
+		if err != nil {
+			return fmt.Errorf("failed parsing token from cloudprovider secret: %w", err)
+		}
+		// We do not care about the signature and authenticity of the token here.
+		// We just want to extract the "sub" claim to know which user the machine-controller-manager
+		// is running as when using workload identity.
+		// Code is only used in local setup.
+		claims := &jwt.Claims{}
+		if err := token.UnsafeClaimsWithoutVerification(claims); err != nil {
+			return fmt.Errorf("failed extracting claims from token in cloudprovider secret: %w", err)
+		}
+		subject = rbacv1.Subject{
+			Kind:     rbacv1.UserKind,
+			APIGroup: rbacv1.SchemeGroupVersion.Group,
+			Name:     claims.Subject,
+		}
+		rbacClient = w.runtimeClient
 	}
 
 	roleBinding := &rbacv1.RoleBinding{
@@ -265,11 +326,9 @@ func (w *workerDelegate) PreReconcileHook(ctx context.Context) error {
 			Kind:     "Role",
 			Name:     role.Name,
 		},
-		Subjects: []rbacv1.Subject{{
-			Kind:      rbacv1.ServiceAccountKind,
-			Name:      v1beta1constants.DeploymentNameMachineControllerManager,
-			Namespace: w.worker.Namespace,
-		}},
+		Subjects: []rbacv1.Subject{
+			subject,
+		},
 	}
 
 	for _, obj := range []client.Object{role, roleBinding} {
@@ -278,7 +337,7 @@ func (w *workerDelegate) PreReconcileHook(ctx context.Context) error {
 		// machine pods and thus also the Role/RoleBinding live in the bootstrap kind cluster.
 		// On the other hand, not setting an ownerReference is not a problem, because when the worker is deleted, the
 		// namespace will also be deleted, automatically cleaning up these objects as well.
-		if err := w.providerClient.Patch(ctx, obj, client.Apply, local.FieldOwner, client.ForceOwnership); err != nil {
+		if err := rbacClient.Patch(ctx, obj, client.Apply, local.FieldOwner, client.ForceOwnership); err != nil {
 			return fmt.Errorf("error applying %T %s: %w", obj, obj.GetName(), err)
 		}
 	}

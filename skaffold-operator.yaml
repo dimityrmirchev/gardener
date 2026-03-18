@@ -982,6 +982,9 @@ deploy:
           config.featureGates.IstioTLSTermination: true
           config.featureGates.PrometheusHealthChecks: true
           config.featureGates.VictoriaLogsBackend: true
+        setFiles:
+          config.gardenerDiscoveryServer.tls.crt: dev/garden/discovery-server/certs/tls.crt
+          config.gardenerDiscoveryServer.tls.key: dev/garden/discovery-server/certs/tls.key
         createNamespace: true
         wait: true
 profiles:
@@ -1071,6 +1074,7 @@ build:
             - extensions/pkg/util/secret/manager
             - extensions/pkg/webhook
             - extensions/pkg/webhook/certificates
+            - extensions/pkg/webhook/cloudprovider
             - extensions/pkg/webhook/cmd
             - extensions/pkg/webhook/context
             - extensions/pkg/webhook/controlplane
@@ -1168,6 +1172,7 @@ build:
             - pkg/provider-local/machine-provider/api/v1alpha1
             - pkg/provider-local/machine-provider/api/validation
             - pkg/provider-local/machine-provider/local
+            - pkg/provider-local/webhook/cloudprovider
             - pkg/provider-local/webhook/controlplane
             - pkg/provider-local/webhook/networkpolicy
             - pkg/provider-local/webhook/node
